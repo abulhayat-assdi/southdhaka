@@ -22,7 +22,6 @@ export default defineConfig({
   },
   redirects: {
     '/en': '/',
-    '/en/': '/',
   },
   image: {
     // Astro's built-in sharp service — all images are optimized at build time
