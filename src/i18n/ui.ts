@@ -1,18 +1,18 @@
 /**
- * All UI copy lives here as { en, bn } objects. Bangla is the default site
- * language ("/" = bn, "/en/" = en).
+ * All UI copy lives here as { en, bn } objects. English is the default site
+ * language ("/" = en, "/bn/" = bn).
  */
 export type Lang = 'bn' | 'en';
 export type L10n = { en: string; bn: string };
 
-export const langs: Lang[] = ['bn', 'en'];
-export const defaultLang: Lang = 'bn';
+export const langs: Lang[] = ['en', 'bn'];
+export const defaultLang: Lang = 'en';
 
 /** Resolve a bilingual object for the active language. */
 export const t = (s: L10n, lang: Lang): string => s[lang] ?? s.en;
 
 /** Path of this page in the other language (used by the toggle). */
-export const altPath = (lang: Lang): string => (lang === 'bn' ? '/en/' : '/');
+export const altPath = (lang: Lang): string => (lang === 'en' ? '/bn/' : '/');
 
 export const ui = {
   skipToContent: { en: 'Skip to content', bn: 'মূল কনটেন্টে যান' },

@@ -10,6 +10,7 @@
  * through Astro's <Image> at build time (see astro.config image.domains), so
  * the optimized files are emitted into dist/ and served by Cloudflare.
  * Visitors never hit Sanity's CDN.
+ * 
  */
 
 const projectId = import.meta.env.SANITY_PROJECT_ID as string | undefined;

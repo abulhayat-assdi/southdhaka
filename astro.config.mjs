@@ -14,11 +14,15 @@ export default defineConfig({
     sitemap(),
   ],
   i18n: {
-    defaultLocale: 'bn',
-    locales: ['bn', 'en'],
+    defaultLocale: 'en',
+    locales: ['en', 'bn'],
     routing: {
-      prefixDefaultLocale: false, // "/" = Bangla (default), "/en/" = English
+      prefixDefaultLocale: false, // "/" = English (default), "/bn/" = Bangla
     },
+  },
+  redirects: {
+    '/en': '/',
+    '/en/': '/',
   },
   image: {
     // Astro's built-in sharp service — all images are optimized at build time

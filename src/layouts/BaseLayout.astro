@@ -11,7 +11,7 @@ const { lang } = Astro.props;
 const title = t(ui.meta.title, lang);
 const description = t(ui.meta.description, lang);
 const site = Astro.site ?? new URL('https://southcity.pages.dev');
-const canonical = new URL(lang === 'bn' ? '/' : '/en/', site);
+const canonical = new URL(lang === 'bn' ? '/bn/' : '/', site);
 const ogImage = new URL('/og-image.png', site);
 
 // Google Fonts: Latin display/body + Bengali display/body, swap for fast text
@@ -45,8 +45,8 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.href} />
-    <link rel="alternate" hreflang="bn" href={new URL('/', site).href} />
-    <link rel="alternate" hreflang="en" href={new URL('/en/', site).href} />
+    <link rel="alternate" hreflang="en" href={new URL('/', site).href} />
+    <link rel="alternate" hreflang="bn" href={new URL('/bn/', site).href} />
     <link rel="alternate" hreflang="x-default" href={new URL('/', site).href} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -75,7 +75,7 @@ const jsonLd = {
           var pref = localStorage.getItem('sc-lang');
           var here = document.documentElement.lang;
           if (pref && pref !== here && !sessionStorage.getItem('sc-lang-nav')) {
-            location.replace(pref === 'en' ? '/en/' : '/');
+            location.replace(pref === 'bn' ? '/bn/' : '/');
           }
           sessionStorage.setItem('sc-lang-nav', '1');
         } catch (e) {}
