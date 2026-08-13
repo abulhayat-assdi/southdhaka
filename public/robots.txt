@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://southcity.pages.dev/sitemap-index.xml
+Sitemap: https://www.southdhaka.com/sitemap-index.xml

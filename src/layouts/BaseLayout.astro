@@ -10,7 +10,7 @@ const { lang } = Astro.props;
 
 const title = t(ui.meta.title, lang);
 const description = t(ui.meta.description, lang);
-const site = Astro.site ?? new URL('https://southcity.pages.dev');
+const site = Astro.site ?? new URL('https://www.southdhaka.com');
 const canonical = new URL(lang === 'bn' ? '/bn/' : '/', site);
 const ogImage = new URL('/og-image.png', site);
 

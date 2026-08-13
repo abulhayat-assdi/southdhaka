@@ -1,14 +1,26 @@
 /**
  * Generates placeholder brand assets (WebP renders, favicons, OG image).
- * Every raster asset here is a PLACEHOLDER — the owner replaces them via
- * Sanity (or by dropping real renders into src/assets/img/) later.
  *
- * Run: npm run assets
+ * ⚠️ src/assets/img/, public/og-image.png and src/assets/brochure.pdf now hold
+ * the REAL artwork cropped from the 2026 South City brochure. Running this
+ * script overwrites all of it with placeholder art, so it refuses to run
+ * unless you pass --force:
+ *
+ *   npm run assets -- --force
  */
 import sharp from 'sharp';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+if (!process.argv.includes('--force')) {
+  console.error(
+    'Refusing to run: this would overwrite the real brochure artwork in\n' +
+      '  src/assets/img/, public/og-image.png, src/assets/brochure.pdf\n' +
+      'Re-run with:  npm run assets -- --force'
+  );
+  process.exit(1);
+}
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const img = join(root, 'src', 'assets', 'img');
@@ -184,7 +196,7 @@ const og = `
   <path d="M100 330 h1000" stroke="${GOLD}" stroke-width="3" opacity="0.6"/>
   ${label(100, 405, 'Planned residential and commercial plots', 40, '#ffffff', 'start', 600)}
   ${label(100, 462, 'Sayedpur, South Keraniganj, Dhaka - beside the Dhaka-Mawa Expressway', 28, '#C6CCE0', 'start', 400)}
-  ${label(100, 555, '500 Bigha  |  4 Sectors  |  3 - 5 - 10 Katha plots', 34, GOLD_LIGHT, 'start', 600)}
+  ${label(100, 555, '600 Bigha  |  4 Sectors  |  3 - 40 Katha plots', 34, GOLD_LIGHT, 'start', 600)}
 </svg>`;
 
 /* ---------------------------------------------------------------- run */
@@ -228,7 +240,7 @@ writeFileSync(join(root, 'src', 'assets', 'brochure.pdf'), pdf);
 
 writeFileSync(
   join(pub, 'robots.txt'),
-  'User-agent: *\nAllow: /\n\nSitemap: https://southcity.pages.dev/sitemap-index.xml\n'
+  'User-agent: *\nAllow: /\n\nSitemap: https://www.southdhaka.com/sitemap-index.xml\n'
 );
 
 console.log('✅ Placeholder assets generated: src/assets/img + public/');

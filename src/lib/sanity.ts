@@ -59,7 +59,7 @@ const GROQ = /* groq */ `{
   "trustBadges": *[_type == "trustBadge"] | order(orderRank asc){ icon, label },
   "facts": *[_type == "projectFact"] | order(orderRank asc){ label, value },
   "plots": *[_type == "plot"] | order(katha.en asc){
-    "id": _id, katha, sqft, dimensions, price, booking, installment
+    "id": _id, katha, zone, sqft, dimensions, price, booking, installment
   },
   "amenities": *[_type == "amenity"] | order(orderRank asc){ icon, label },
   "landmarkTabs": *[_type == "landmarkTab"] | order(orderRank asc){

@@ -150,8 +150,8 @@ export const ui = {
       bn: 'সাউথ সিটি — দক্ষিণ কেরানীগঞ্জে আবাসিক ও বাণিজ্যিক প্লট',
     },
     description: {
-      en: 'South City: a ~500-bigha planned residential & commercial land project beside the Dhaka–Mawa Expressway in Sayedpur, South Keraniganj. 3, 5 & 10 Katha plots, installments up to 5 years. Call or WhatsApp today.',
-      bn: 'সাউথ সিটি: ঢাকা–মাওয়া এক্সপ্রেসওয়ের পাশে, সায়েদপুর, দক্ষিণ কেরানীগঞ্জে প্রায় ৫০০ বিঘার পরিকল্পিত আবাসিক ও বাণিজ্যিক ল্যান্ড প্রকল্প। ৩, ৫ ও ১০ কাঠার প্লট, ৫ বছর পর্যন্ত কিস্তি। আজই কল বা হোয়াটসঅ্যাপ করুন।',
+      en: 'South City: a ~600-bigha planned residential & commercial land project in Sayedpur Union, South Keraniganj — 5 minutes from the Dhaka–Mawa Expressway. Plots from 3 to 40 Katha, installments up to 5 years. Call or WhatsApp today.',
+      bn: 'সাউথ সিটি: দক্ষিণ কেরানীগঞ্জের সৈয়দপুর ইউনিয়নে প্রায় ৬০০ বিঘার পরিকল্পিত আবাসিক ও বাণিজ্যিক ল্যান্ড প্রকল্প — ঢাকা–মাওয়া এক্সপ্রেসওয়ে থেকে ৫ মিনিট। ৩ থেকে ৪০ কাঠার প্লট, ৫ বছর পর্যন্ত কিস্তি। আজই কল বা হোয়াটসঅ্যাপ করুন।',
     },
   },
 } as const;

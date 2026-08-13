@@ -13,8 +13,11 @@ import g3 from '../assets/img/gallery-3.webp';
 import g4 from '../assets/img/gallery-4.webp';
 import g5 from '../assets/img/gallery-5.webp';
 import g6 from '../assets/img/gallery-6.webp';
+import g7 from '../assets/img/gallery-7.webp';
+import g8 from '../assets/img/gallery-8.webp';
+import g9 from '../assets/img/gallery-9.webp';
 
-const localSources = [g1, g2, g3, g4, g5, g6];
+const localSources = [g1, g2, g3, g4, g5, g6, g7, g8, g9];
 
 // Sanity gallery (if published) replaces the local set — still build-optimized
 const items = remoteImages.gallery?.length
@@ -25,13 +28,15 @@ const items = remoteImages.gallery?.length
     }))
   : localSources.map((src, i) => ({ src, caption: galleryCaptions[i], remote: false }));
 
-// pre-generate the large lightbox variants at build time
+// pre-generate the large lightbox variants at build time.
+// Local sources are brochure crops of varying width — never ask for more
+// pixels than the file actually has, or sharp upscales and it goes soft.
 const large = await Promise.all(
   items.map((it) =>
     getImage({
       src: it.src,
       ...(it.remote ? { inferSize: true as const } : {}),
-      width: 1200,
+      width: it.remote ? 1200 : Math.min(1200, (it.src as ImageMetadata).width),
       quality: 75,
       format: 'webp',
     })
@@ -65,7 +70,7 @@ const { lang } = Astro.props;
               src={it.src as ImageMetadata}
               {...(it.remote ? { inferSize: true } : {})}
               alt={t(it.caption, lang)}
-              widths={[360, 600, 900]}
+              widths={[360, 640]}
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 45vw, 380px"
               quality={70}
               loading="lazy"

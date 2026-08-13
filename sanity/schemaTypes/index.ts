@@ -38,7 +38,7 @@ const siteSettings = defineType({
     defineField({ name: 'companyName', title: 'Company legal name', type: 'localeString' }),
     defineField({
       name: 'phone',
-      title: 'Sales phone (tel: format, e.g. +8801862534626)',
+      title: 'Sales phone (tel: format, e.g. +8801886175263)',
       type: 'string',
     }),
     defineField({ name: 'phoneDisplay', title: 'Phone as displayed', type: 'string' }),
@@ -151,6 +151,11 @@ const plot = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'katha', title: 'Size (e.g. "3 Katha" / "৩ কাঠা")', type: 'localeString' }),
+    defineField({
+      name: 'zone',
+      title: 'Zone name — optional (e.g. "Exclusive Zone" / "এক্সক্লুসিভ জোন")',
+      type: 'localeString',
+    }),
     defineField({ name: 'sqft', title: 'Area in sq ft', type: 'localeString' }),
     defineField({ name: 'dimensions', title: 'Approx. dimensions', type: 'localeString' }),
     defineField({

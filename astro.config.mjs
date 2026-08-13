@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://southcity.pages.dev', // replace with the real domain after launch
+  site: 'https://www.southdhaka.com',
   integrations: [
     tailwind({
       // we import our own global.css so we control layer order + custom CSS
