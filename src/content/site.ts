@@ -28,10 +28,12 @@ export const settings = {
     en: 'Rahman Mansion (4th Floor), 161 Motijheel C/A, Dhaka-1000, Bangladesh',
     bn: 'রহমান ম্যানশন (৪র্থ তলা) ১৬১, মতিঝিল সি/এ, ঢাকা-১০০০, বাংলাদেশ',
   } as L10n,
+  // only the channels the company actually runs — leave a key out (or set it to
+  // null) and its footer icon disappears
   social: {
-    facebook: 'https://www.facebook.com/', // 🔴 placeholder URL
-    youtube: 'https://www.youtube.com/', // 🔴 placeholder URL
-    linkedin: 'https://www.linkedin.com/', // 🔴 placeholder URL
+    facebook: 'https://www.facebook.com/SouthDhakaHousing.Ltd',
+    youtube: null as string | null,
+    linkedin: null as string | null,
   },
   brochureUrl: '/brochure/south-city-brochure.pdf',
   // 🔴 still approximate — the brochure's map page shows the Google Maps place
@@ -458,7 +460,7 @@ export const galleryCaptions: L10n[] = [
 ];
 
 /* -------------------------------------------------- lead form / Web3Forms */
-// 🔴 placeholder — create a free key at https://web3forms.com and set it here
-// or via the PUBLIC_WEB3FORMS_KEY environment variable.
+// Access key is public by design (it only allows posting to the inbox it is
+// registered to). Override per-environment with PUBLIC_WEB3FORMS_KEY.
 export const WEB3FORMS_KEY =
-  import.meta.env.PUBLIC_WEB3FORMS_KEY ?? 'YOUR_WEB3FORMS_ACCESS_KEY';
+  import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '094a49de-078c-48fd-9ec2-676a3626bf2b';

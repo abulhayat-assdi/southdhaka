@@ -93,6 +93,15 @@ export const ui = {
     installment: { en: 'Installments', bn: 'কিস্তি সুবিধা' },
     reserve: { en: 'Reserve this plot', bn: 'এই প্লটটি রিজার্ভ করুন' },
     callForPrice: { en: 'Call for price', bn: 'মূল্যের জন্য কল করুন' },
+    callNow: { en: 'Call Now', bn: 'কল করুন' },
+    priceAria: {
+      en: 'Ask about plot price on WhatsApp',
+      bn: 'হোয়াটসঅ্যাপে প্লটের মূল্য জানুন',
+    },
+    bookingAria: {
+      en: 'Ask about booking money on WhatsApp',
+      bn: 'হোয়াটসঅ্যাপে বুকিং মানি জানুন',
+    },
   },
 
   location: {

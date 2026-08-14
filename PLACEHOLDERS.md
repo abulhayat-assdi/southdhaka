@@ -11,22 +11,47 @@ details, project facts and all imagery now come from it. See
 
 | Item | Placeholder used | Where it appears |
 |---|---|---|
-| Social links | Bare `facebook.com` / `youtube.com` / `linkedin.com` | Footer icons — the brochure's QR code links to the real Facebook/WhatsApp, decode it and paste the URLs |
 | Google Map pin | search query `South City Sayedpur Keraniganj Dhaka` | `settings.mapQuery` — replace with the exact plus-code/coords for a precise pin |
+
+⚠️ **The logo artwork carries the wrong company name.** The registered name is
+**"South Dhaka Properties & Housing Ltd."** (owner-confirmed; matches the
+brochure and the Facebook page `/SouthDhakaHousing.Ltd`), and that is what the
+site renders everywhere. But the gold ribbon inside `src/assets/logo.jpg` reads
+**"South Dhaka Properties & Developments Ltd."**
+
+Until the artwork is corrected, the site uses **only the emblem** — the gold
+arc, SD towers, houses and tree — and never the ribbon wordmark, so the wrong
+name is not shown anywhere. Once you have a corrected logo, replace
+`src/assets/logo.jpg` and run `npm run icons` to re-export every icon.
 
 ## Commerce
 
 | Item | Placeholder used | Where |
 |---|---|---|
-| Plot prices (3/5/10/20/30/40 Katha) | "Call for price" / "মূল্যের জন্য কল করুন" | Plot tabs |
+| Plot prices (3/5/10/20/30/40 Katha) | "Call for price" / "মূল্যের জন্য কল করুন" | Plot tabs — owner's decision, keep until prices are published |
 | Booking money | "Call for details" | Plot tabs |
-| Web3Forms access key | `YOUR_WEB3FORMS_ACCESS_KEY` | `src/content/site.ts` (or set env `PUBLIC_WEB3FORMS_KEY`) — form will NOT deliver email until replaced |
 
 ## Media
 
-| Item | File | Note |
-|---|---|---|
-| Logo / favicon | `public/favicon.svg`, `favicon-32.png`, `favicon-48.png`, `apple-touch-icon.png`, `icon-512.png` | Still the generated "SD" emblem. The brochure only carries the logo as flattened raster — ask the owner for the **vector logo** (AI/SVG/EPS) and export these from it |
+Hero, master plan, gallery and the Connectivity tab come from the brochure. The
+**stock photos** listed below are generic licensed imagery, not South City — swap
+them for real project / Keraniganj photography when it exists:
+
+| File | Shows |
+|---|---|
+| `src/assets/img/landmark-education.webp` | a school campus |
+| `src/assets/img/landmark-health.webp` | a doctor's consultation |
+| `src/assets/img/landmark-daily.webp` | a super shop |
+| `src/assets/img/amenities-bg.webp` | aerial of a planned neighbourhood (Amenities section backdrop) |
+| `src/assets/img/icons/*.webp` (18) | thumbnail per amenity / trust badge |
+
+Source: **Pexels** (free for commercial use, no attribution required). Icon files
+are 256×256 centre crops; replacing one only means dropping in a square image with
+the same file name — the key matches the `icon` field in `src/content/site.ts`, and
+a missing file silently falls back to the inline SVG in `src/components/Icon.astro`.
+
+One nice-to-have: `src/assets/logo.jpg` is a 1402×1122 raster. A **vector logo
+(AI / SVG / EPS)** would give crisper icons at 512 px and above.
 
 ## Config
 
@@ -64,7 +89,10 @@ details, project facts and all imagery now come from it. See
 | Road widths | 25 / 30 / 40 / 60 ft (30 ft was missing) |
 | Trust badge | "Own Purchased Land" replaced the unsourced "40% Land Already Acquired" |
 | Brochure PDF | `src/assets/brochure.pdf` — the real 8-page brochure |
-| Hero / master plan / gallery ×8 / landmark ×4 / OG image | cropped from the brochure pages into `src/assets/img/` and `public/og-image.png` |
+| Hero / master plan / gallery ×9 / Connectivity tab / OG image | cropped from the brochure pages into `src/assets/img/` and `public/og-image.png` (Education / Health / Daily Needs tabs are now stock photos — see Media above) |
+| Facebook | `https://www.facebook.com/SouthDhakaHousing.Ltd` (YouTube & LinkedIn intentionally omitted) |
+| Web3Forms key | live — the contact form delivers |
+| Favicons / app icons / header & footer mark | exported from the real logo emblem via `npm run icons` |
 
 ⚠️ `npm run assets` regenerates **placeholder** art and would overwrite the real
 brochure imagery above. It now refuses to run without `npm run assets -- --force`.

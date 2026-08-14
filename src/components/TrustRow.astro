@@ -3,10 +3,17 @@
  * Trust row — verifiable claims only.
  * 🔴 Spec §6.4/§10: NO "RAJUK Approved" badge, NO REHAB logo on this site.
  */
+import { Image } from 'astro:assets';
 import { ui, t, type Lang } from '../i18n/ui';
 import { trustBadges } from '../content';
 import SectionHeading from './SectionHeading.astro';
 import Icon from './Icon.astro';
+
+/** Photo thumbnail per icon key; falls back to the inline SVG when missing. */
+const iconPhotos = import.meta.glob<{ default: ImageMetadata }>('../assets/img/icons/*.webp', {
+  eager: true,
+});
+const photo = (name: string) => iconPhotos[`../assets/img/icons/${name}.webp`]?.default;
 
 interface Props {
   lang: Lang;
@@ -26,8 +33,21 @@ const { lang } = Astro.props;
       {
         trustBadges.map((b) => (
           <li class="reveal flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-6 text-center">
-            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-gold/15 text-gold-light">
-              <Icon name={b.icon} class="h-6 w-6" />
+            <span class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gold/15 text-gold-light shadow-lg ring-2 ring-gold/35">
+              {photo(b.icon) ? (
+                <Image
+                  src={photo(b.icon)!}
+                  alt=""
+                  width={128}
+                  height={128}
+                  quality={80}
+                  loading="lazy"
+                  aria-hidden="true"
+                  class="h-full w-full object-cover"
+                />
+              ) : (
+                <Icon name={b.icon} class="h-6 w-6" />
+              )}
             </span>
             <span class="text-sm font-semibold leading-snug text-white">{t(b.label, lang)}</span>
           </li>

@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { ui, t, altPath, type Lang } from '../i18n/ui';
 import { settings } from '../content';
 import Icon from './Icon.astro';
+import logoMark from '../assets/img/logo-mark.webp';
 
 interface Props {
   lang: Lang;
@@ -27,19 +29,16 @@ const otherLang = lang === 'bn' ? 'en' : 'bn';
   <div class="container-c flex h-full items-center justify-between gap-4">
     <!-- wordmark -->
     <a href={lang === 'bn' ? '/bn/' : '/'} class="flex shrink-0 items-center gap-2.5" aria-label="South City — home">
-      <svg viewBox="0 0 48 48" class="h-9 w-9" aria-hidden="true">
-        <circle cx="24" cy="24" r="22" fill="#14245C"></circle>
-        <circle cx="24" cy="24" r="22" fill="none" stroke="#C9A227" stroke-width="2.5"></circle>
-        <text
-          x="24"
-          y="31"
-          text-anchor="middle"
-          font-family="Georgia, serif"
-          font-size="17"
-          font-weight="700"
-          fill="#E2C56B">SD</text
-        >
-      </svg>
+      <Image
+        src={logoMark}
+        alt=""
+        widths={[72, 144]}
+        sizes="40px"
+        quality={90}
+        loading="eager"
+        class="h-9 w-9 md:h-10 md:w-10"
+        aria-hidden="true"
+      />
       <span class="font-display leading-tight">
         <span class="block text-lg font-extrabold tracking-wide text-navy">SOUTH CITY</span>
         <span class="block text-[10px] font-medium uppercase tracking-[0.14em] text-gold"

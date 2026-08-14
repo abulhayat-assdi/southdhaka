@@ -98,19 +98,51 @@ const { lang } = Astro.props;
                     </p>
                     <p class="mt-1 font-display text-xl font-bold text-navy">{t(p.dimensions, lang)}</p>
                   </div>
-                  <div class="rounded-lg bg-bg-soft p-4">
+                  <div class="flex flex-col rounded-lg bg-bg-soft p-4">
                     <p class="text-xs font-semibold uppercase tracking-wide text-muted">
                       {t(ui.plots.price, lang)}
                     </p>
-                    <p class="mt-1 font-display text-xl font-bold text-gold">
+                    <p class="mb-3 mt-1 font-display text-xl font-bold text-gold">
                       {p.price ? t(p.price, lang) : t(ui.plots.callForPrice, lang)}
                     </p>
+                    <a
+                      href={waLink(
+                        lang,
+                        lang === 'bn'
+                          ? `আসসালামু আলাইকুম, সাউথ সিটির ${p.katha.bn} প্লটের মূল্য জানতে চাই।`
+                          : `Assalamu Alaikum, I'd like to know the price of a ${p.katha.en} plot at South City.`
+                      )}
+                      target="_blank"
+                      rel="noopener"
+                      class="btn-wa-sm mt-auto"
+                      aria-label={t(ui.plots.priceAria, lang)}
+                      data-track="whatsapp_click"
+                    >
+                      <Icon name="whatsapp" class="h-4 w-4" />
+                      {t(ui.plots.callNow, lang)}
+                    </a>
                   </div>
-                  <div class="rounded-lg bg-bg-soft p-4">
+                  <div class="flex flex-col rounded-lg bg-bg-soft p-4">
                     <p class="text-xs font-semibold uppercase tracking-wide text-muted">
                       {t(ui.plots.booking, lang)}
                     </p>
-                    <p class="mt-1 font-display text-xl font-bold text-navy">{t(p.booking, lang)}</p>
+                    <p class="mb-3 mt-1 font-display text-xl font-bold text-navy">{t(p.booking, lang)}</p>
+                    <a
+                      href={waLink(
+                        lang,
+                        lang === 'bn'
+                          ? `আসসালামু আলাইকুম, সাউথ সিটির ${p.katha.bn} প্লটের বুকিং মানি ও কিস্তির বিস্তারিত জানতে চাই।`
+                          : `Assalamu Alaikum, I'd like details on booking money and installments for a ${p.katha.en} plot at South City.`
+                      )}
+                      target="_blank"
+                      rel="noopener"
+                      class="btn-wa-sm mt-auto"
+                      aria-label={t(ui.plots.bookingAria, lang)}
+                      data-track="whatsapp_click"
+                    >
+                      <Icon name="whatsapp" class="h-4 w-4" />
+                      {t(ui.plots.callNow, lang)}
+                    </a>
                   </div>
                 </div>
 

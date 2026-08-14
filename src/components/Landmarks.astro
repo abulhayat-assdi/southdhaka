@@ -79,11 +79,11 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
             <Image
               src={images[tab.image]}
               alt={t(tab.label, lang)}
-              widths={[480, 640]}
+              widths={[600, 900, 1160]}
               sizes="(max-width: 767px) 100vw, 580px"
-              quality={72}
+              quality={76}
               loading="lazy"
-              class="h-auto w-full rounded-xl border border-line"
+              class="aspect-[4/3] w-full rounded-xl border border-line object-cover shadow-card"
             />
           </div>
         ))
