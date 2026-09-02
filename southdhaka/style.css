@@ -1,0 +1,19 @@
+/*
+Theme Name: South City
+Theme URI: https://southdhaka.com
+Author: South Dhaka Properties & Housing Ltd.
+Author URI: https://southdhaka.com
+Description: A traditional WordPress theme converted from the South City Astro, Tailwind CSS, and Sanity CMS landing page project.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: south-city
+Tags: custom-logo, custom-menu, featured-images, full-width-template, translation-ready
+*/
+
+/*
+This file is required by WordPress for theme identification.
+Compiled Tailwind CSS is loaded from assets/css/main.css via functions.php.
+*/
