@@ -462,15 +462,20 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                     <h2><?php echo esc_html(south_city_translate('gallery_title', $language)); ?></h2>
                 </div>
                 <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-                    <?php while ($gallery_query->have_posts()) : ?>
-                        <?php $gallery_query->the_post(); ?>
-                        <?php
-                        $gallery_image = south_city_asset_url(south_city_get_field_or_meta('image', get_the_ID()), 'large');
-                        $caption       = south_city_get_locale_field('caption', get_the_ID(), $language);
-                        ?>
-                        <?php if ($gallery_image === '') : ?>
-                            <?php continue; ?>
-                        <?php endif; ?>
+                    <?php 
+                    $seen_gallery_items = [];
+                    while ($gallery_query->have_posts()) : 
+                        $gallery_query->the_post(); 
+                        $post_id       = get_the_ID();
+                        $gallery_image = south_city_asset_url(south_city_get_field_or_meta('image', $post_id), 'large');
+                        $caption       = south_city_get_locale_field('caption', $post_id, $language);
+                        
+                        $dedup_key = $gallery_image ?: $caption;
+                        if (! $dedup_key || in_array($dedup_key, $seen_gallery_items, true)) {
+                            continue;
+                        }
+                        $seen_gallery_items[] = $dedup_key;
+                    ?>
                         <button type="button" class="reveal group relative overflow-hidden rounded-xl border border-line" data-lightbox="<?php echo esc_url($gallery_image); ?>" data-caption="<?php echo esc_attr($caption); ?>" aria-label="<?php echo esc_attr($caption); ?>">
                             <img src="<?php echo esc_url($gallery_image); ?>" alt="<?php echo esc_attr($caption); ?>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
                             <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-deep/85 to-transparent px-3 pb-2.5 pt-8 text-left text-xs font-medium text-white sm:text-sm"><?php echo esc_html($caption); ?></span>

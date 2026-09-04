@@ -169,6 +169,24 @@ function southcity_cms_render_app() {
 }
 
 /**
+ * Render a helpful notice when ACF is not active.
+ */
+function southcity_cms_render_acf_missing_notice() {
+	echo '<div class="bg-amber-50 border-l-4 border-amber-500 p-5 rounded-r-md">';
+	echo '<div class="flex items-start">';
+	echo '<div class="flex-shrink-0"><svg class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>';
+	echo '<div class="ml-3">';
+	echo '<h3 class="text-base font-bold text-amber-800">ACF (Advanced Custom Fields) is not active</h3>';
+	echo '<p class="mt-2 text-sm text-amber-700">South City Dashboard needs the <strong>Advanced Custom Fields (ACF)</strong> plugin to edit website content. Please follow these steps:</p>';
+	echo '<ol class="mt-2 ml-4 list-decimal text-sm text-amber-700 space-y-1">';
+	echo '<li>Go to WordPress Dashboard (<a href="' . esc_url( admin_url( 'plugins.php' ) ) . '" class="underline font-semibold" target="_blank">wp-admin &rarr; Plugins</a>)</li>';
+	echo '<li>Search for <strong>Advanced Custom Fields</strong></li>';
+	echo '<li>Click <strong>Install Now</strong> and then <strong>Activate</strong></li>';
+	echo '</ol>';
+	echo '</div></div></div>';
+}
+
+/**
  * Render the Options Page ACF form.
  */
 function southcity_cms_render_options_form() {
@@ -184,7 +202,7 @@ function southcity_cms_render_options_form() {
 			'html_updated_message'  => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Settings saved successfully.</div>',
 		] );
 	} else {
-		echo '<p>ACF is not active.</p>';
+		southcity_cms_render_acf_missing_notice();
 	}
 	echo '</div>';
 }
@@ -212,6 +230,8 @@ function southcity_cms_render_homepage_form() {
 			'return'       => add_query_arg( [ 'view' => 'homepage', 'updated' => 'true' ], southcity_cms_url() ),
 			'html_updated_message'  => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Homepage updated successfully.</div>',
 		] );
+	} else {
+		southcity_cms_render_acf_missing_notice();
 	}
 	echo '</div>';
 }
@@ -278,6 +298,8 @@ function southcity_cms_render_cpt_form( $post_type, $post_id ) {
 			'html_updated_message'  => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Item saved successfully.</div>',
 		];
 		acf_form( $options );
+	} else {
+		southcity_cms_render_acf_missing_notice();
 	}
 	echo '</div>';
 }

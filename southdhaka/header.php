@@ -81,7 +81,17 @@ $default_nav    = south_city_default_nav_items($language);
         </nav>
 
         <div class="flex items-center gap-2 md:gap-3">
-            <div id="google_translate_element" class="inline-flex items-center rounded-md border border-line overflow-hidden max-h-[40px] px-2 py-1 text-sm bg-white"></div>
+            <div id="google_translate_element"></div>
+
+            <a
+                href="<?php echo esc_url($language_url); ?>"
+                class="inline-flex items-center gap-1.5 rounded-md border border-line bg-white px-2.5 py-2 text-xs font-semibold text-navy transition-colors hover:border-gold hover:text-gold"
+                data-set-lang="<?php echo esc_attr($other_language); ?>"
+                title="<?php echo esc_attr(south_city_translate('language_label', $language)); ?>"
+            >
+                <span aria-hidden="true">🌐</span>
+                <span><?php echo esc_html(south_city_translate('language_short', $language)); ?></span>
+            </a>
 
             <a
                 href="tel:<?php echo esc_attr($phone); ?>"
