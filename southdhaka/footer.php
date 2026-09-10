@@ -17,6 +17,7 @@ $address       = south_city_get_locale_option('address', $language);
 $address       = $address !== '' ? $address : 'Rahman Mansion (4th Floor), 161 Motijheel C/A, Dhaka-1000, Bangladesh';
 $company_name  = south_city_get_locale_option('company_name', $language);
 $company_name  = $company_name !== '' ? $company_name : 'South Dhaka Properties & Housing Ltd.';
+$website_url   = (string) south_city_get_option('website_url', '');
 $social_links  = [
     [
         'label' => 'Facebook',
@@ -96,6 +97,17 @@ $default_nav = south_city_default_nav_items($language);
                             <?php echo esc_html($email); ?>
                         </a>
                     </li>
+                    <?php if ($website_url !== '') : ?>
+                        <li>
+                            <a
+                                href="<?php echo esc_url($website_url); ?>"
+                                class="flex min-h-[44px] items-center gap-3 break-all hover:text-gold-light"
+                            >
+                                <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">🌐</span>
+                                <?php echo esc_html(preg_replace('#^https?://#', '', untrailingslashit($website_url))); ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             <?php endif; ?>
         </div>
@@ -158,6 +170,12 @@ $default_nav = south_city_default_nav_items($language);
                 </div>
             <?php endif; ?>
         </div>
+    </div>
+
+    <div class="sc-legacy-strip">
+        <span aria-hidden="true"></span>
+        <?php echo esc_html(south_city_translate('legacy_strip', $language)); ?>
+        <span aria-hidden="true"></span>
     </div>
 
     <div class="border-t border-white/10">

@@ -215,3 +215,441 @@ body {
     content: "🌐 ";
     font-size: 14px;
 }
+
+/* ==========================================================================
+   Brochure-aligned sections (Chairman/MD message, company profile,
+   why South City, investment, ownership process, grouped amenities).
+   Hand-written because the theme ships a pre-compiled Tailwind build.
+   Palette: navy #14245c · navy-deep #0e1a44 · gold #c9a227 · gold-light #e2c56b
+   ========================================================================== */
+
+.sc-section h2.sc-display,
+.sc-display {
+    font-family: "Playfair Display", "Hind Siliguri", Georgia, serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+[data-site-language="bn"] .sc-display,
+[data-site-language="bn"] .sc-subtitle {
+    font-family: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+}
+
+.sc-divider {
+    display: block;
+    width: 68px;
+    height: 2px;
+    margin: 0.9rem 0 0;
+    background: #c9a227;
+    position: relative;
+}
+
+.sc-divider::before,
+.sc-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background: #c9a227;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.sc-divider::before { left: -3px; }
+.sc-divider::after { left: 74px; }
+
+.sc-section--dark .sc-divider,
+.sc-section--dark .sc-divider::before,
+.sc-section--dark .sc-divider::after { background: #e2c56b; }
+
+.sc-subtitle {
+    font-family: "Playfair Display", "Hind Siliguri", Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #14245c;
+    margin: 0 0 0.9rem;
+}
+
+.sc-section--dark .sc-subtitle { color: #ffffff; }
+
+/* Chairman / MD message */
+.sc-message {
+    margin-top: 1.25rem;
+    max-width: 62ch;
+    color: #3f4756;
+    font-size: 1.02rem;
+    line-height: 1.8;
+}
+
+.sc-message p + p { margin-top: 1rem; }
+.sc-message--light { color: rgba(255, 255, 255, 0.82); }
+
+.sc-message-media {
+    display: flex;
+}
+
+.sc-message-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    max-height: 460px;
+    object-fit: cover;
+}
+
+.sc-signoff {
+    margin-top: 1.5rem;
+    font-weight: 700;
+    color: #14245c;
+}
+
+.sc-signoff--light { color: #ffffff; }
+
+.sc-signoff__role {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a227;
+    margin-bottom: 0.15rem;
+}
+
+.sc-section--dark .sc-signoff__role { color: #e2c56b; }
+
+/* Project summary grid (brochure p.3) */
+.sc-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.35rem;
+    padding: 1.1rem 0.75rem;
+    border: 1px solid #e3e6ec;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(20, 36, 92, 0.06);
+}
+
+.sc-summary-item__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background: rgba(201, 162, 39, 0.14);
+    color: #c9a227;
+    font-size: 1.35rem;
+    box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.3);
+}
+
+.sc-summary-item__value {
+    font-family: "Playfair Display", "Hind Siliguri", Georgia, serif;
+    font-weight: 700;
+    color: #14245c;
+    font-size: 1.05rem;
+    line-height: 1.2;
+}
+
+.sc-summary-item__label {
+    font-size: 0.8rem;
+    color: #5b6472;
+}
+
+.sc-summary-note {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #5b6472;
+    text-align: center;
+}
+
+/* Company profile */
+.sc-profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+}
+
+.sc-profile-card { padding: 1.5rem; }
+
+.sc-profile-card h3 {
+    font-family: "Playfair Display", "Hind Siliguri", Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #14245c;
+    margin: 0.75rem 0 0.5rem;
+}
+
+.sc-profile-card p {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.sc-profile-card__icon,
+.sc-why-item__icon,
+.sc-amenity-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    background: rgba(201, 162, 39, 0.14);
+    color: #c9a227;
+    font-size: 1.6rem;
+    box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.28);
+}
+
+.sc-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-values li {
+    border: 1px solid rgba(201, 162, 39, 0.5);
+    background: rgba(201, 162, 39, 0.1);
+    color: #14245c;
+    border-radius: 9999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Why South City */
+.sc-why-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-why-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.sc-why-item h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #14245c;
+    margin: 0 0 0.25rem;
+}
+
+.sc-why-item p {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Investment */
+.sc-invest-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-invest-item {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.sc-invest-item__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background: rgba(226, 197, 107, 0.15);
+    color: #e2c56b;
+    font-size: 1.5rem;
+    box-shadow: inset 0 0 0 1px rgba(226, 197, 107, 0.35);
+}
+
+.sc-invest-item h3 {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0.75rem 0 0.4rem;
+}
+
+.sc-invest-item p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Ownership process */
+.sc-process {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-process__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    padding: 1.5rem 1rem 1.25rem;
+    border: 1px solid #e3e6ec;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(20, 36, 92, 0.06);
+}
+
+.sc-process__num {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: rgba(201, 162, 39, 0.35);
+}
+
+.sc-process__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 9999px;
+    background: #14245c;
+    color: #e2c56b;
+    font-size: 1.6rem;
+}
+
+.sc-process__label {
+    font-weight: 700;
+    color: #14245c;
+    font-size: 0.95rem;
+}
+
+/* Grouped amenities (brochure p.2) */
+.sc-amenity-group { margin-top: 2.5rem; }
+.sc-amenity-group:first-of-type { margin-top: 0; }
+
+.sc-amenity-cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-amenity-card { padding: 1.25rem; }
+
+.sc-amenity-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #14245c;
+    margin: 0.6rem 0 0.35rem;
+}
+
+.sc-amenity-card p {
+    color: #5b6472;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.sc-amenity-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sc-amenity-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid #e3e6ec;
+    border-radius: 9999px;
+    padding: 0.5rem 0.95rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #14245c;
+    background: #ffffff;
+}
+
+.sc-amenity-chip__icon {
+    color: #c9a227;
+    font-size: 1.15em;
+    display: inline-flex;
+}
+
+/* Legacy strip */
+.sc-legacy-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.95rem 1rem;
+    background: #0b1636;
+    color: #e2c56b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.sc-legacy-strip span {
+    flex: 1;
+    height: 1px;
+    max-width: 120px;
+    background: linear-gradient(to right, transparent, rgba(226, 197, 107, 0.6), transparent);
+}
+
+@media (min-width: 640px) {
+    .sc-summary-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .sc-profile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sc-why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sc-invest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sc-process { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sc-amenity-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+    .sc-profile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .sc-why-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sc-invest-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sc-process { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .sc-amenity-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

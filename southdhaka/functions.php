@@ -176,7 +176,7 @@ function south_city_enqueue_assets(): void
 
     wp_enqueue_style(
         'south-city-fonts',
-        'https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&family=Hind+Siliguri:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&display=swap',
+        'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&family=Hind+Siliguri:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&display=swap',
         [],
         null
     );
@@ -596,6 +596,110 @@ function south_city_translate(string $key, ?string $language = null): string
             'en' => '© 2026 South City · South Dhaka Properties & Housing Ltd. All rights reserved.',
             'bn' => '© ২০২৬ সাউথ সিটি · সাউথ ঢাকা প্রপার্টিজ অ্যান্ড হাউজিং লিমিটেড। সর্বস্বত্ব সংরক্ষিত।',
         ],
+        'legacy_strip' => [
+            'en' => 'Building Landmark, Creating Legacy',
+            'bn' => 'Building Landmark, Creating Legacy',
+        ],
+        'website' => [
+            'en' => 'Website',
+            'bn' => 'ওয়েবসাইট',
+        ],
+        'chairman_eyebrow' => [
+            'en' => 'Commitment is our greatest strength',
+            'bn' => 'প্রতিশ্রুতি — আমাদের সর্বশ্রেষ্ঠ শক্তি',
+        ],
+        'chairman_title' => [
+            'en' => "Chairman's Message",
+            'bn' => 'চেয়ারম্যানের বার্তা',
+        ],
+        'chairman_role' => [
+            'en' => 'Chairman',
+            'bn' => 'চেয়ারম্যান',
+        ],
+        'summary_title' => [
+            'en' => 'Project at a Glance',
+            'bn' => 'প্রকল্পের সংক্ষিপ্ত বিবরণ',
+        ],
+        'summary_footnote' => [
+            'en' => 'We do not just sell plots — we build relationships, from one generation to the next.',
+            'bn' => 'আমরা শুধু প্লট বিক্রি করি না, আমরা সম্পর্ক গড়ে তুলি — প্রজন্ম থেকে প্রজন্মে।',
+        ],
+        'md_eyebrow' => [
+            'en' => 'Commitment is our greatest strength',
+            'bn' => 'অঙ্গীকারই আমাদের সর্বশ্রেষ্ঠ শক্তি',
+        ],
+        'md_title' => [
+            'en' => "Managing Director's Message",
+            'bn' => 'ব্যবস্থাপনা পরিচালকের বার্তা',
+        ],
+        'md_role' => [
+            'en' => 'Managing Director',
+            'bn' => 'ব্যবস্থাপনা পরিচালক',
+        ],
+        'profile_eyebrow' => [
+            'en' => 'Who we are',
+            'bn' => 'আমরা কারা',
+        ],
+        'profile_title' => [
+            'en' => 'Company Profile',
+            'bn' => 'কোম্পানির প্রোফাইল',
+        ],
+        'profile_about' => [
+            'en' => 'About Us',
+            'bn' => 'আমাদের সম্পর্কে',
+        ],
+        'profile_vision' => [
+            'en' => 'Vision',
+            'bn' => 'ভিশন',
+        ],
+        'profile_mission' => [
+            'en' => 'Mission',
+            'bn' => 'মিশন',
+        ],
+        'profile_values' => [
+            'en' => 'Core Values',
+            'bn' => 'মূল মান',
+        ],
+        'why_eyebrow' => [
+            'en' => 'A sound choice to live, a smart decision to invest',
+            'bn' => 'বসবাসের জন্য সঠিক পছন্দ, বিনিয়োগের জন্য বিচক্ষণ সিদ্ধান্ত',
+        ],
+        'why_title' => [
+            'en' => 'Why South City?',
+            'bn' => 'সাউথ সিটি কেন?',
+        ],
+        'investment_eyebrow' => [
+            'en' => 'Own today, prosper tomorrow',
+            'bn' => 'আজই মালিক হোন, আগামীতে সমৃদ্ধি লাভ করুন',
+        ],
+        'investment_title' => [
+            'en' => 'Intelligent Investment. Secure Future.',
+            'bn' => 'বুদ্ধিদীপ্ত বিনিয়োগ। সুরক্ষিত ভবিষ্যৎ।',
+        ],
+        'process_eyebrow' => [
+            'en' => 'Simple, transparent steps',
+            'bn' => 'সহজ, স্বচ্ছ ধাপ',
+        ],
+        'process_title' => [
+            'en' => 'Ownership Process',
+            'bn' => 'মালিকানা প্রক্রিয়া',
+        ],
+        'legend_title' => [
+            'en' => 'Sector Guide',
+            'bn' => 'সেক্টর গাইড',
+        ],
+        'amenities_group_core' => [
+            'en' => 'World-Class Facilities',
+            'bn' => 'বিশ্বমানের সুবিধা',
+        ],
+        'amenities_group_infrastructure' => [
+            'en' => 'Modern Infrastructure',
+            'bn' => 'আধুনিক অবকাঠামো',
+        ],
+        'amenities_group_security' => [
+            'en' => 'Security & Community',
+            'bn' => 'নিরাপত্তা ও কমিউনিটি',
+        ],
     ];
 
     return $strings[$key][$language] ?? $strings[$key]['en'] ?? $key;
@@ -717,6 +821,44 @@ function south_city_landmark_image_url(string $image_key): string
 }
 
 /**
+ * Return an inline SVG line icon for the brochure-driven sections.
+ *
+ * Icons inherit color via `currentColor` and scale to the parent font size.
+ */
+function south_city_inline_icon(string $key): string
+{
+    $paths = [
+        'location'  => '<path d="M12 21s-7-6.3-7-11a7 7 0 1 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/>',
+        'map'       => '<path d="m9 4 6 2 5.5-2v14L15 20l-6-2-5.5 2V6L9 4Z"/><path d="M9 4v14M15 6v14"/>',
+        'road'      => '<path d="M7 21 9 3M17 21 15 3M12 5v2M12 11v2M12 17v2"/>',
+        'growth'    => '<path d="M4 19h16M6 16l4-5 4 3 5-8"/><path d="M19 6v4M19 6h-4"/>',
+        'leaf'      => '<path d="M20 4S8 4 6 12c-1.5 6 3 8 3 8M20 4c0 8-4 12-11 12M20 4c-.5 4-2 6-2 6"/>',
+        'shield'    => '<path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4.5"/>',
+        'family'    => '<circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="7" r="2.5"/><path d="M4 20v-2a4 4 0 0 1 4-4M20 20v-2a4 4 0 0 0-4-4M10 20v-2a4 4 0 0 1 4-4"/>',
+        'doc'       => '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+        'wallet'    => '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14h2"/>',
+        'crane'     => '<path d="M6 21V4l14 3-14 2M6 8h5M9 8v13M6 21h8"/>',
+        'home'      => '<path d="M4 11 12 4l8 7M6 10v10h5v-6h2v6h5V10"/>',
+        'handshake' => '<path d="m8 12 3 3 2-2 3 3M4 10l4-4 4 4 4-4 4 4M4 10v4l6 6 4-4M20 10v4l-3 3"/>',
+        'target'    => '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+        'eye'       => '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+        'building'  => '<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/>',
+        'sparkle'   => '<path d="M12 3v6M12 15v6M3 12h6M15 12h6M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"/>',
+        'landplot'  => '<path d="M4 8 12 4l8 4v8l-8 4-8-4V8Z"/><path d="m4 8 8 4 8-4M12 12v8"/>',
+        'stamp'     => '<path d="M9 3h6l-1 6h-4L9 3ZM6 15h12l-1-4H7l-1 4ZM4 21h16v-2H4v2Z"/>',
+        'scale'     => '<path d="M12 4v16M6 20h12M4 8h16M8 8l-3 6a3 3 0 0 0 6 0L8 8ZM16 8l-3 6a3 3 0 0 0 6 0l-3-6Z"/>',
+        'calendar'  => '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+        'route'     => '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 16.5 16 7.5M9 6H7a3 3 0 0 0 0 6h10a3 3 0 0 1 0 6h-2"/>',
+        'water'     => '<path d="M4 14c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2M4 18c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2M12 3s5 5 5 8a5 5 0 0 1-10 0c0-3 5-8 5-8Z"/>',
+        'check'     => '<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5L16 9"/>',
+    ];
+
+    $inner = $paths[$key] ?? $paths['check'];
+
+    return '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $inner . '</svg>';
+}
+
+/**
  * Read a bilingual value from an ACF repeater row.
  */
 function south_city_get_locale_row_value(array $row, string $base_name, ?string $language = null): string
@@ -753,6 +895,67 @@ function south_city_ordered_query(string $post_type, int $posts_per_page = -1): 
     ]);
 }
 
+/**
+ * Split a textarea value into trimmed paragraphs on blank lines.
+ *
+ * @return string[]
+ */
+function south_city_paragraphs(string $text): array
+{
+    $text  = str_replace(["\r\n", "\r"], "\n", $text);
+    $parts = preg_split('/\n\s*\n/', trim($text)) ?: [];
+
+    return array_values(array_filter(array_map('trim', $parts), static fn ($p) => $p !== ''));
+}
+
+/**
+ * Amenity groups shown on the homepage, in display order.
+ *
+ * @return array<string,string> slug => translation key
+ */
+function south_city_amenity_groups(): array
+{
+    return [
+        'core'           => 'amenities_group_core',
+        'infrastructure' => 'amenities_group_infrastructure',
+        'security'       => 'amenities_group_security',
+    ];
+}
+
+/**
+ * Return ordered amenities that belong to a given amenity group slug.
+ */
+function south_city_amenities_in_group(string $group_slug): WP_Query
+{
+    return new WP_Query([
+        'post_type'      => 'southcity_amenity',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'tax_query'      => [
+            [
+                'taxonomy' => 'southcity_amenity_group',
+                'field'    => 'slug',
+                'terms'    => $group_slug,
+            ],
+        ],
+        'meta_key'       => 'order_rank',
+        'orderby'        => [
+            'meta_value_num' => 'ASC',
+            'menu_order'     => 'ASC',
+            'title'          => 'ASC',
+        ],
+        'order'          => 'ASC',
+    ]);
+}
+
 require_once SOUTH_CITY_THEME_DIR . '/inc/cpt.php';
 require_once SOUTH_CITY_THEME_DIR . '/inc/acf.php';
 require_once SOUTH_CITY_THEME_DIR . '/inc/default-content.php';
+
+/**
+ * Re-apply seed content when SOUTH_CITY_SEED_VERSION has been bumped.
+ *
+ * Runs after CPTs and taxonomies are registered. The function itself
+ * returns early once the stored version matches, so this is cheap.
+ */
+add_action('init', 'south_city_seed_default_content', 99);
