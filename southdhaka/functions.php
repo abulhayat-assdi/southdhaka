@@ -923,6 +923,39 @@ function south_city_amenity_groups(): array
 }
 
 /**
+ * Drop posts from an already-run WP_Query whose bilingual field value
+ * (e.g. "label" or "caption") repeats an earlier post's value.
+ *
+ * Guards the front end against duplicate CPT rows regardless of cause
+ * (a bad re-seed, manual admin entries, etc.) — the display never shows
+ * the same tab/card/photo twice even if the database briefly does.
+ */
+function south_city_dedupe_query_by_field(WP_Query $query, string $field, ?string $language = null): void
+{
+    $language = $language ?: south_city_current_language();
+    $seen     = [];
+
+    $query->posts = array_values(array_filter($query->posts, static function ($post) use ($field, $language, &$seen) {
+        $value = south_city_get_locale_field($field, $post->ID, $language);
+        // strtolower (not mb_strtolower) on purpose: it only rewrites ASCII
+        // A-Z bytes, so multibyte Bangla UTF-8 sequences pass through intact,
+        // and it works even when the mbstring extension isn't available.
+        $key   = strtolower(trim($value));
+
+        if ($key === '' || isset($seen[$key])) {
+            return false;
+        }
+
+        $seen[$key] = true;
+
+        return true;
+    }));
+
+    $query->post_count   = count($query->posts);
+    $query->current_post = -1;
+}
+
+/**
  * Return ordered amenities that belong to a given amenity group slug.
  */
 function south_city_amenities_in_group(string $group_slug): WP_Query

@@ -1016,8 +1016,18 @@ function south_city_register_acf_field_groups(): void
         'title' => __('Amenity Fields', 'south-city'),
         'fields' => [
             [
+                'key' => 'field_south_city_amenity_image',
+                'label' => __('Photo (shown in the circle instead of the icon)', 'south-city'),
+                'name' => 'image',
+                'type' => 'image',
+                'return_format' => 'array',
+                'preview_size' => 'medium',
+                'library' => 'all',
+                'instructions' => __('Upload a real photo for this facility. If left empty, the icon below is used instead.', 'south-city'),
+            ],
+            [
                 'key' => 'field_south_city_amenity_icon',
-                'label' => __('Icon', 'south-city'),
+                'label' => __('Icon (fallback, used only when no photo is set)', 'south-city'),
                 'name' => 'icon',
                 'type' => 'select',
                 'choices' => $icon_choices,

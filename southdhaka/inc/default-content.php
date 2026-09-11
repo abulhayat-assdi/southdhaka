@@ -16,11 +16,24 @@ if (! defined('ABSPATH')) {
  * Bump this whenever the seed content below changes so an already-active
  * site re-applies it on the next request (see the init hook in functions.php).
  */
-const SOUTH_CITY_SEED_VERSION = 3;
+const SOUTH_CITY_SEED_VERSION = 4;
 
 function south_city_upsert_seed_post(string $post_type, string $title, string $slug, array $meta = [], string $content = '', array $term_slugs = [], string $taxonomy = ''): int
 {
-    $existing = get_page_by_path($slug, OBJECT, $post_type);
+    // Look up by exact post_name (not get_page_by_path, which is unreliable
+    // for non-hierarchical custom post types) across every status, oldest
+    // match first, so a re-seed always updates the same post instead of
+    // occasionally inserting a duplicate with a "-2" suffixed slug.
+    $matches = get_posts([
+        'post_type'      => $post_type,
+        'name'           => $slug,
+        'post_status'    => ['publish', 'draft', 'pending', 'future', 'private', 'trash'],
+        'numberposts'    => 1,
+        'orderby'        => 'ID',
+        'order'          => 'ASC',
+        'suppress_filters' => true,
+    ]);
+    $existing = $matches[0] ?? null;
 
     $post_data = [
         'post_title'   => $title,
@@ -249,9 +262,12 @@ function south_city_seed_default_content(): void
         ['Road Width', 'fact-road-width', ['label_en' => 'Road width', 'label_bn' => 'রাস্তার প্রশস্ততা', 'value_en' => "25' / 30' / 40' / 60'", 'value_bn' => "২৫' / ৩০' / ৪০' / ৬০'", 'order_rank' => 8]],
     ];
 
+    $fact_slugs = [];
     foreach ($facts as $fact) {
         south_city_upsert_seed_post('southcity_fact', $fact[0], $fact[1], $fact[2]);
+        $fact_slugs[] = $fact[1];
     }
+    south_city_prune_seed_posts('southcity_fact', $fact_slugs);
 
     $plots = [
         ['3 Katha', 'plot-3-katha', ['katha_en' => '3 Katha', 'katha_bn' => '৩ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '2,160 sq ft', 'sqft_bn' => '২,১৬০ বর্গফুট', 'dimensions_en' => 'Approx. 36 ft x 60 ft', 'dimensions_bn' => 'প্রায় ৩৬ ফুট x ৬০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 1]],
@@ -262,9 +278,12 @@ function south_city_seed_default_content(): void
         ['40 Katha', 'plot-40-katha', ['katha_en' => '40 Katha', 'katha_bn' => '৪০ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '28,800 sq ft', 'sqft_bn' => '২৮,৮০০ বর্গফুট', 'dimensions_en' => 'Approx. 144 ft x 200 ft', 'dimensions_bn' => 'প্রায় ১৪৪ ফুট x ২০০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 6]],
     ];
 
+    $plot_slugs = [];
     foreach ($plots as $plot) {
         south_city_upsert_seed_post('southcity_plot', $plot[0], $plot[1], $plot[2]);
+        $plot_slugs[] = $plot[1];
     }
+    south_city_prune_seed_posts('southcity_plot', $plot_slugs);
 
     // Amenities grouped exactly as the brochure (p.2): core facilities,
     // modern infrastructure, and security & community.
@@ -328,9 +347,12 @@ function south_city_seed_default_content(): void
         ], 'order_rank' => 4]],
     ];
 
+    $landmark_slugs = [];
     foreach ($landmarks as $landmark) {
         south_city_upsert_seed_post('southcity_landmark', $landmark[0], $landmark[1], $landmark[2]);
+        $landmark_slugs[] = $landmark[1];
     }
+    south_city_prune_seed_posts('southcity_landmark', $landmark_slugs);
 
     $gallery_captions = [
         ['South City main gateway', 'সাউথ সিটির প্রধান প্রবেশদ্বার'],
@@ -344,15 +366,19 @@ function south_city_seed_default_content(): void
         ['Children play area', 'শিশুদের খেলার জায়গা'],
     ];
 
+    $gallery_slugs = [];
     foreach ($gallery_captions as $index => $caption) {
         $number = $index + 1;
-        south_city_upsert_seed_post('southcity_gallery', $caption[0], 'gallery-' . $number, [
+        $gallery_slug = 'gallery-' . $number;
+        south_city_upsert_seed_post('southcity_gallery', $caption[0], $gallery_slug, [
             'image' => SOUTH_CITY_THEME_URI . '/assets/img/gallery-' . $number . '.webp',
             'caption_en' => $caption[0],
             'caption_bn' => $caption[1],
             'order_rank' => $number,
         ]);
+        $gallery_slugs[] = $gallery_slug;
     }
+    south_city_prune_seed_posts('southcity_gallery', $gallery_slugs);
 
     update_option('south_city_default_content_seeded', 1);
     update_option('south_city_seed_version', SOUTH_CITY_SEED_VERSION);

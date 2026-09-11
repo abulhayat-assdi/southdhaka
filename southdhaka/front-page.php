@@ -161,36 +161,6 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
         </section>
     <?php endif; ?>
 
-    <?php if (! empty($md_body)) : ?>
-        <section id="managing-director" class="section-pad bg-navy-deep sc-section sc-section--dark">
-            <div class="container-c">
-                <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
-                    <div class="reveal">
-                        <p class="eyebrow !text-gold-light"><?php echo esc_html(south_city_translate('md_eyebrow', $language)); ?></p>
-                        <h2 class="sc-display !text-white"><?php echo esc_html(south_city_translate('md_title', $language)); ?></h2>
-                        <span class="sc-divider" aria-hidden="true"></span>
-                        <div class="sc-message sc-message--light">
-                            <?php foreach ($md_body as $paragraph) : ?>
-                                <p><?php echo esc_html($paragraph); ?></p>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php if ($md_name !== '') : ?>
-                            <p class="sc-signoff sc-signoff--light">
-                                <span class="sc-signoff__role"><?php echo esc_html(south_city_translate('md_role', $language)); ?></span>
-                                <?php echo esc_html($md_name); ?>
-                            </p>
-                        <?php endif; ?>
-                    </div>
-                    <?php if ($md_image !== '') : ?>
-                        <div class="reveal sc-message-media">
-                            <img src="<?php echo esc_url($md_image); ?>" alt="" class="rounded-xl border border-white/10 object-cover shadow-card" loading="lazy" aria-hidden="true">
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </section>
-    <?php endif; ?>
-
     <?php if ($about_text !== '' || $vision_text !== '' || $mission_text !== '' || ! empty($core_values)) : ?>
         <section id="company-profile" class="section-pad bg-bg-soft sc-section">
             <div class="container-c">
@@ -593,6 +563,7 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
 
     <?php $landmark_query = south_city_ordered_query('southcity_landmark'); ?>
     <?php if ($landmark_query->have_posts()) : ?>
+        <?php south_city_dedupe_query_by_field($landmark_query, 'label', $language); ?>
         <section class="section-pad bg-bg-soft">
             <div class="container-c">
                 <div class="reveal mb-8 md:mb-12">
@@ -655,6 +626,9 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
     $has_any_amenity  = false;
     foreach ($amenity_groups as $group_slug => $group_key) {
         $group_query = south_city_amenities_in_group($group_slug);
+        if ($group_query->have_posts()) {
+            south_city_dedupe_query_by_field($group_query, 'label', $language);
+        }
         $amenity_group_qs[$group_slug] = $group_query;
         if ($group_query->have_posts()) {
             $has_any_amenity = true;
@@ -665,6 +639,7 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
         <?php $amenity_query = south_city_ordered_query('southcity_amenity'); ?>
         <?php if ($amenity_query->have_posts()) : ?>
             <?php
+            south_city_dedupe_query_by_field($amenity_query, 'label', $language);
             // Fallback: ungrouped amenities (before the grouped seed runs).
             $amenity_group_qs = ['core' => $amenity_query];
             $has_any_amenity  = true;
@@ -697,12 +672,22 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                                 <?php
                                 $group_query->the_post();
                                 $icon       = (string) south_city_get_field_or_meta('icon', get_the_ID(), 'check');
+                                $amen_photo = south_city_asset_url(south_city_get_field_or_meta('image', get_the_ID()), 'medium');
+                                if ($amen_photo === '') {
+                                    $amen_photo = south_city_icon_image_url($icon);
+                                }
                                 $label      = south_city_get_locale_field('label', get_the_ID(), $language);
                                 $amen_desc  = south_city_get_locale_field('desc', get_the_ID(), $language);
                                 ?>
                                 <?php if ($is_core) : ?>
                                     <li class="card sc-amenity-card">
-                                        <span class="sc-amenity-card__icon" aria-hidden="true"><?php echo south_city_inline_icon($icon); ?></span>
+                                        <?php if ($amen_photo !== '') : ?>
+                                            <span class="sc-amenity-card__icon sc-amenity-card__icon--photo" aria-hidden="true">
+                                                <img src="<?php echo esc_url($amen_photo); ?>" alt="" loading="lazy">
+                                            </span>
+                                        <?php else : ?>
+                                            <span class="sc-amenity-card__icon" aria-hidden="true"><?php echo south_city_inline_icon($icon); ?></span>
+                                        <?php endif; ?>
                                         <h4><?php echo esc_html($label); ?></h4>
                                         <?php if ($amen_desc !== '') : ?>
                                             <p><?php echo esc_html($amen_desc); ?></p>
@@ -725,6 +710,7 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
 
     <?php $gallery_query = south_city_ordered_query('southcity_gallery'); ?>
     <?php if ($gallery_query->have_posts()) : ?>
+        <?php south_city_dedupe_query_by_field($gallery_query, 'caption', $language); ?>
         <section id="gallery" class="section-pad bg-bg-soft">
             <div class="container-c">
                 <div class="reveal mb-8 md:mb-12">
