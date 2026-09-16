@@ -30,7 +30,6 @@ Homepage content is managed on the page assigned as the static front page:
 - Overview paragraph and counters
 - Master plan image and hotspots
 - Location distances and boundaries
-- Web3Forms access key
 
 Repeatable Sanity documents are now WordPress custom post types:
 
@@ -48,7 +47,7 @@ The theme loads:
 - CSS from `assets/css/main.css`
 - JS from `assets/js/main.js`
 - Fallback images from `assets/img/`
-- Fallback brochure from `assets/brochure.pdf`
+- Brochure PDF is uploaded via the Media Library and set on the Brochure PDF field in South City Settings
 
 Run the Tailwind build again after changing PHP template classes:
 

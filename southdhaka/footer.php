@@ -36,6 +36,43 @@ $social_links  = [
     ],
 ];
 $default_nav = south_city_default_nav_items($language);
+
+$bottom_nav_map = [];
+foreach ($default_nav as $nav_item) {
+    $key = $nav_item['spy'] !== '' ? $nav_item['spy'] : 'about';
+    if (! isset($bottom_nav_map[$key])) {
+        $bottom_nav_map[$key] = $nav_item;
+    }
+}
+
+$bottom_nav_home_url = trailingslashit($language === 'bn' ? home_url('/bn/') : home_url('/'));
+$bottom_nav_items     = [
+    [
+        'href'  => $bottom_nav_map['master-plan']['href'] ?? $bottom_nav_home_url . '#master-plan',
+        'label' => south_city_translate('master_plan', $language),
+        'icon'  => 'map',
+    ],
+    [
+        'href'  => $bottom_nav_map['plots']['href'] ?? $bottom_nav_home_url . '#plots',
+        'label' => south_city_translate('plots', $language),
+        'icon'  => 'landplot',
+    ],
+    [
+        'href'  => $bottom_nav_map['overview']['href'] ?? $bottom_nav_home_url . '#overview',
+        'label' => south_city_translate('overview', $language),
+        'icon'  => 'home',
+    ],
+    [
+        'href'  => $bottom_nav_map['contact']['href'] ?? $bottom_nav_home_url . '#contact',
+        'label' => south_city_translate('contact', $language),
+        'icon'  => 'mail',
+    ],
+    [
+        'href'  => $bottom_nav_map['about']['href'] ?? $bottom_nav_home_url,
+        'label' => south_city_translate('about_us', $language),
+        'icon'  => 'building',
+    ],
+];
 ?>
 
 <footer class="bg-navy-deep text-white">
@@ -165,7 +202,7 @@ $default_nav = south_city_default_nav_items($language);
                         class="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-whatsapp hover:text-whatsapp"
                         data-track="whatsapp_click"
                     >
-                        W
+                        <?php echo south_city_whatsapp_icon('h-5 w-5'); ?>
                     </a>
                 </div>
             <?php endif; ?>
@@ -185,48 +222,48 @@ $default_nav = south_city_default_nav_items($language);
     </div>
 </footer>
 
+<div class="h-16 lg:hidden" aria-hidden="true"></div>
+
 <nav
-    class="fixed inset-x-0 bottom-0 z-50 grid h-14 grid-cols-2 md:hidden"
-    aria-label="<?php echo esc_attr(south_city_translate('quick_contact', $language)); ?>"
+    id="mobile-bottom-nav"
+    class="fixed inset-x-0 bottom-0 z-40 flex items-stretch justify-between border-t border-line bg-white px-2 shadow-lg lg:hidden"
     style="padding-bottom: env(safe-area-inset-bottom)"
+    aria-label="<?php esc_attr_e('Quick links', 'south-city'); ?>"
 >
-    <a
-        href="tel:<?php echo esc_attr($phone); ?>"
-        class="flex items-center justify-center gap-2 bg-navy font-display text-base font-semibold text-white"
-        data-track="call_click"
-    >
-        <span class="text-gold-light" aria-hidden="true">☎</span>
-        <?php echo esc_html(south_city_translate('sticky_call', $language)); ?>
-    </a>
-    <a
-        href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>"
-        target="_blank"
-        rel="noopener"
-        class="flex items-center justify-center gap-2 bg-whatsapp font-display text-base font-semibold text-white"
-        data-track="whatsapp_click"
-    >
-        <span aria-hidden="true">W</span>
-        <?php echo esc_html(south_city_translate('sticky_whatsapp', $language)); ?>
-    </a>
+    <?php foreach ($bottom_nav_items as $bn_index => $bn_item) : ?>
+        <?php if ($bn_index === 2) : ?>
+            <a
+                href="<?php echo esc_url($bn_item['href']); ?>"
+                class="relative flex flex-1 flex-col items-center justify-center py-2 text-navy"
+            >
+                <span class="absolute -top-6 flex h-14 w-14 items-center justify-center rounded-full bg-navy text-white shadow-lg" aria-hidden="true">
+                    <span class="text-2xl leading-none"><?php echo south_city_inline_icon($bn_item['icon']); ?></span>
+                </span>
+                <span class="mt-9 text-[10px] font-semibold leading-none"><?php echo esc_html($bn_item['label']); ?></span>
+            </a>
+        <?php else : ?>
+            <a
+                href="<?php echo esc_url($bn_item['href']); ?>"
+                class="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-navy transition-colors hover:text-gold"
+            >
+                <span class="text-lg leading-none" aria-hidden="true"><?php echo south_city_inline_icon($bn_item['icon']); ?></span>
+                <span class="text-[10px] font-semibold leading-none"><?php echo esc_html($bn_item['label']); ?></span>
+            </a>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </nav>
 
 <a
     href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>"
     target="_blank"
     rel="noopener"
-    class="fab-pulse fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-lg transition-transform hover:scale-105 md:flex"
+    class="fab-pulse fixed bottom-24 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-lg transition-transform hover:scale-105 lg:bottom-6 lg:right-6"
+    style="margin-bottom: env(safe-area-inset-bottom)"
     aria-label="<?php echo esc_attr(south_city_translate('sticky_whatsapp', $language)); ?>"
     data-track="whatsapp_click"
 >
-    W
+    <?php echo south_city_whatsapp_icon('h-7 w-7 text-white'); ?>
 </a>
-
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,bn', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 <?php wp_footer(); ?>
 </body>

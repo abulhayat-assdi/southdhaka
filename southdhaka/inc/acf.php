@@ -1086,6 +1086,75 @@ function south_city_register_acf_field_groups(): void
     ]);
 
     acf_add_local_field_group([
+        'key' => 'group_south_city_location_fields',
+        'title' => __('Location Fields', 'south-city'),
+        'fields' => [
+            [
+                'key' => 'field_south_city_location_label_en',
+                'label' => __('Label - English', 'south-city'),
+                'name' => 'label_en',
+                'type' => 'text',
+                'instructions' => __('e.g. "South City Sales Office" or "Project Site".', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_location_label_bn',
+                'label' => __('Label - Bangla', 'south-city'),
+                'name' => 'label_bn',
+                'type' => 'text',
+            ],
+            [
+                'key' => 'field_south_city_location_latitude',
+                'label' => __('Latitude', 'south-city'),
+                'name' => 'latitude',
+                'type' => 'text',
+                'instructions' => __('e.g. 23.6543. Right-click the spot on Google Maps and copy the first coordinate.', 'south-city'),
+                'required' => 1,
+            ],
+            [
+                'key' => 'field_south_city_location_longitude',
+                'label' => __('Longitude', 'south-city'),
+                'name' => 'longitude',
+                'type' => 'text',
+                'instructions' => __('e.g. 90.4293. Right-click the spot on Google Maps and copy the second coordinate.', 'south-city'),
+                'required' => 1,
+            ],
+            [
+                'key' => 'field_south_city_location_zoom',
+                'label' => __('Map Zoom', 'south-city'),
+                'name' => 'zoom',
+                'type' => 'number',
+                'default_value' => 15,
+                'min' => 1,
+                'max' => 20,
+            ],
+            [
+                'key' => 'field_south_city_location_is_primary',
+                'label' => __('Use as Homepage Map Pin', 'south-city'),
+                'name' => 'is_primary',
+                'type' => 'true_false',
+                'instructions' => __('Turning this on for a location automatically turns it off for every other location. The homepage "Minutes From the Expressway" map always shows the one location marked here.', 'south-city'),
+                'ui' => 1,
+                'default_value' => 0,
+            ],
+        ],
+        'location' => [
+            [
+                [
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'southcity_location',
+                ],
+            ],
+        ],
+        'menu_order' => 6,
+        'position' => 'normal',
+        'style' => 'default',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'active' => true,
+    ]);
+
+    acf_add_local_field_group([
         'key' => 'group_south_city_landmark_fields',
         'title' => __('Neighborhood Tab Fields', 'south-city'),
         'fields' => [

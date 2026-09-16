@@ -15,34 +15,46 @@ function southcity_cms_render_app() {
 	$logout_url   = wp_nonce_url( add_query_arg( 'sc_action', 'logout', southcity_cms_url() ), 'sc_logout' );
 	
 	// Determine the current view
-	$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'settings';
+	$view = isset( $_GET['view'] ) ? sanitize_text_field( wp_unslash( $_GET['view'] ) ) : 'dashboard';
 	$post_id = isset( $_GET['post_id'] ) ? intval( wp_unslash( $_GET['post_id'] ) ) : 0;
 	$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 
 	// Navigation structure based on South City content model
 	$nav_items = [
-		'settings' => [
-			'label' => 'Global Settings',
-			'icon'  => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'
+		'dashboard' => [
+			'label' => 'Dashboard',
+			'icon'  => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2'
+		],
+		'leads' => [
+			'label' => 'Leads',
+			'icon'  => 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-3-6.65'
 		],
 		'homepage' => [
 			'label' => 'Homepage Content',
 			'icon'  => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+		],
+		'brochure' => [
+			'label' => 'Brochure',
+			'icon'  => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
 		],
 		'southcity_plot' => [
 			'label' => 'Plots & Pricing',
 			'icon'  => 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7'
 		],
 		'southcity_amenity' => [
-			'label' => 'Amenities',
+			'label' => 'Amenities & Facilities',
 			'icon'  => 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z'
 		],
 		'southcity_landmark' => [
 			'label' => 'Neighborhood',
 			'icon'  => 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
 		],
+		'southcity_location' => [
+			'label' => 'Location Manager',
+			'icon'  => 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z'
+		],
 		'southcity_gallery' => [
-			'label' => 'Gallery Images',
+			'label' => 'Project Gallery',
 			'icon'  => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
 		],
 		'southcity_fact' => [
@@ -69,8 +81,9 @@ function southcity_cms_render_app() {
 			.acf-field { border: none !important; padding: 15px 0 !important; }
 			.acf-label label { font-weight: 600 !important; color: #1e293b !important; font-family: ui-sans-serif, system-ui, sans-serif !important; }
 			.acf-input input[type="text"], .acf-input textarea, .acf-input select { border-radius: 0.375rem !important; border: 1px solid #cbd5e1 !important; padding: 0.5rem 0.75rem !important; width: 100% !important; max-width: 100% !important; }
-			.acf-button { background-color: #14245C !important; border-color: #14245C !important; text-shadow: none !important; box-shadow: none !important; padding: 6px 14px !important; }
-			.acf-button:hover { background-color: #0E1A44 !important; }
+			.acf-button, .acf-field .button { background-color: #14245C !important; border-color: #14245C !important; color: #ffffff !important; text-shadow: none !important; box-shadow: none !important; padding: 6px 14px !important; }
+			.acf-button:hover, .acf-field .button:hover { background-color: #0E1A44 !important; color: #ffffff !important; }
+			.acf-field .button:visited { color: #ffffff !important; }
 			#wpadminbar { display: none !important; }
 			html { margin-top: 0 !important; }
 		</style>
@@ -136,14 +149,25 @@ function southcity_cms_render_app() {
 				<main class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-slate-50">
 					<div class="py-6">
 						<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8">
-							<h1 class="text-2xl font-bold text-slate-900"><?php echo esc_html( $nav_items[$view]['label'] ); ?></h1>
+							<h1 class="text-2xl font-bold text-slate-900"><?php echo esc_html( $nav_items[ $view ]['label'] ?? 'South City' ); ?></h1>
 						</div>
 						<div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 mt-6">
 							
 							<?php
 							// RENDER THE VIEW
-							if ( $view === 'settings' ) {
-								southcity_cms_render_options_form();
+							if ( $view === 'dashboard' ) {
+								southcity_cms_render_dashboard();
+							} elseif ( $view === 'leads' ) {
+								if ( $action === 'edit' ) {
+									$lead_id = isset( $_GET['lead_id'] ) ? intval( wp_unslash( $_GET['lead_id'] ) ) : 0;
+									southcity_cms_render_lead_form( $lead_id );
+								} else {
+									southcity_cms_render_leads_list();
+								}
+							} elseif ( $view === 'settings' ) {
+								southcity_cms_render_settings_moved_notice();
+							} elseif ( $view === 'brochure' ) {
+								southcity_cms_render_brochure_form();
 							} elseif ( $view === 'homepage' ) {
 								southcity_cms_render_homepage_form();
 							} else {
@@ -187,23 +211,188 @@ function southcity_cms_render_acf_missing_notice() {
 }
 
 /**
- * Render the Options Page ACF form.
+ * Global Settings now lives only in the main WordPress dashboard (ACF options page).
  */
-function southcity_cms_render_options_form() {
+function southcity_cms_render_settings_moved_notice() {
+	$settings_url = admin_url( 'admin.php?page=south-city-settings' );
+
 	echo '<div class="bg-white shadow rounded-lg p-6">';
+	echo '<p class="text-slate-600">Global Settings is now managed from the main WordPress dashboard.</p>';
+	echo '<a href="' . esc_url( $settings_url ) . '" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#14245C] hover:bg-[#0E1A44]" target="_blank" rel="noopener">Open in WordPress Dashboard &rarr;</a>';
+	echo '</div>';
+}
+
+/**
+ * Render just the Brochure PDF field from the ACF options page, so it can be
+ * updated here without exposing every other global setting.
+ */
+function southcity_cms_render_brochure_form() {
+	echo '<div class="bg-white shadow rounded-lg p-6">';
+
 	if ( function_exists( 'acf_form' ) ) {
+		$current_url = south_city_cms_current_brochure_url();
+
+		if ( $current_url ) {
+			echo '<p class="mb-4 text-sm text-slate-600">Current file: <a href="' . esc_url( $current_url ) . '" class="text-blue-600 hover:text-blue-900 font-medium" target="_blank" rel="noopener">' . esc_html( basename( wp_parse_url( $current_url, PHP_URL_PATH ) ) ) . '</a></p>';
+		} else {
+			echo '<p class="mb-4 text-sm text-amber-700">No brochure uploaded yet. Visitors will not see a "Download Brochure" button until one is added here.</p>';
+		}
+
 		acf_form( [
-			'id'           => 'sc-settings-form',
-			'post_id'      => 'options',
-			'post_title'   => false,
-			'post_content' => false,
-			'submit_value' => 'Save Settings',
-			'return'       => add_query_arg( 'updated', 'true', southcity_cms_url() ),
-			'html_updated_message'  => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Settings saved successfully.</div>',
+			'id'                   => 'sc-brochure-form',
+			'post_id'              => 'options',
+			'post_title'           => false,
+			'post_content'         => false,
+			'fields'               => [ 'field_south_city_brochure_pdf' ],
+			'submit_value'         => 'Save Brochure',
+			'return'               => add_query_arg( [ 'view' => 'brochure', 'updated' => 'true' ], southcity_cms_url() ),
+			'html_updated_message' => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Brochure updated successfully.</div>',
 		] );
 	} else {
 		southcity_cms_render_acf_missing_notice();
 	}
+
+	echo '</div>';
+}
+
+/**
+ * Read the currently saved brochure file URL, if any.
+ */
+function south_city_cms_current_brochure_url() {
+	$value = function_exists( 'get_field' ) ? get_field( 'brochure_pdf', 'option' ) : null;
+
+	if ( is_array( $value ) && ! empty( $value['url'] ) ) {
+		return (string) $value['url'];
+	}
+
+	if ( is_string( $value ) && $value !== '' ) {
+		return $value;
+	}
+
+	return '';
+}
+
+/**
+ * Render the click/submission counters.
+ */
+function southcity_cms_render_dashboard() {
+	$counts = southcity_cms_lead_counts();
+	?>
+	<div class="grid gap-4 sm:grid-cols-2">
+		<div class="bg-white shadow rounded-lg p-6">
+			<p class="text-sm font-medium text-slate-500">WhatsApp button clicks (Leads)</p>
+			<p class="mt-2 text-4xl font-bold text-[#14245C]"><?php echo esc_html( number_format_i18n( $counts['leads'] ) ); ?></p>
+		</div>
+		<div class="bg-white shadow rounded-lg p-6">
+			<p class="text-sm font-medium text-slate-500">Form fill-ups (Purchases)</p>
+			<p class="mt-2 text-4xl font-bold text-[#14245C]"><?php echo esc_html( number_format_i18n( $counts['purchases'] ) ); ?></p>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Render the list of contact-form submissions.
+ */
+function southcity_cms_render_leads_list() {
+	$per_page = 50;
+	$paged    = isset( $_GET['paged'] ) ? max( 1, intval( wp_unslash( $_GET['paged'] ) ) ) : 1;
+	$rows     = southcity_cms_get_purchases( $per_page, $paged );
+	$total    = southcity_cms_count_purchases();
+	$pages    = (int) ceil( $total / $per_page );
+
+	if ( isset( $_GET['updated'] ) && 'true' === $_GET['updated'] ) {
+		echo '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Lead updated successfully.</div>';
+	}
+
+	if ( isset( $_GET['deleted'] ) && 'true' === $_GET['deleted'] ) {
+		echo '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Lead deleted successfully.</div>';
+	}
+
+	if ( empty( $rows ) ) {
+		echo '<div class="bg-white shadow rounded-lg p-10 text-center text-slate-500">No form submissions yet.</div>';
+		return;
+	}
+
+	echo '<div class="bg-white shadow rounded-lg overflow-hidden overflow-x-auto">';
+	echo '<table class="min-w-full divide-y divide-slate-200">';
+	echo '<thead class="bg-slate-50"><tr>';
+	foreach ( [ 'Name', 'Phone', 'Plot Size', 'Message', 'Submitted', 'Actions' ] as $head ) {
+		echo '<th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">' . esc_html( $head ) . '</th>';
+	}
+	echo '</tr></thead>';
+	echo '<tbody class="divide-y divide-slate-100">';
+	foreach ( $rows as $row ) {
+		$edit_url   = add_query_arg( [ 'view' => 'leads', 'action' => 'edit', 'lead_id' => $row->id ], southcity_cms_url() );
+		$delete_url = wp_nonce_url( add_query_arg( [ 'sc_action' => 'delete_lead', 'lead_id' => $row->id ], southcity_cms_url() ), 'sc_delete_lead_' . $row->id );
+
+		echo '<tr>';
+		echo '<td class="px-4 py-3 text-sm font-medium text-slate-900">' . esc_html( $row->name ) . '</td>';
+		echo '<td class="px-4 py-3 text-sm text-slate-600">' . esc_html( $row->phone ) . '</td>';
+		echo '<td class="px-4 py-3 text-sm text-slate-600">' . esc_html( $row->plot_size ) . '</td>';
+		echo '<td class="px-4 py-3 text-sm text-slate-600 max-w-xs truncate">' . esc_html( $row->message ) . '</td>';
+		echo '<td class="px-4 py-3 text-sm text-slate-500 whitespace-nowrap">' . esc_html( mysql2date( 'M j, Y g:i a', $row->created_at ) ) . '</td>';
+		echo '<td class="px-4 py-3 text-sm whitespace-nowrap">';
+		echo '<a href="' . esc_url( $edit_url ) . '" class="text-blue-600 hover:text-blue-900 font-medium mr-4">Edit</a>';
+		echo '<a href="' . esc_url( $delete_url ) . '" class="text-red-600 hover:text-red-900 font-medium" onclick="return confirm(\'Delete this lead? This cannot be undone.\');">Delete</a>';
+		echo '</td>';
+		echo '</tr>';
+	}
+	echo '</tbody></table></div>';
+
+	if ( $pages > 1 ) {
+		echo '<div class="mt-4 flex gap-2">';
+		for ( $i = 1; $i <= $pages; $i++ ) {
+			$page_url = add_query_arg( [ 'view' => 'leads', 'paged' => $i ], southcity_cms_url() );
+			$is_current = $i === $paged;
+			echo '<a href="' . esc_url( $page_url ) . '" class="' . ( $is_current ? 'bg-[#14245C] text-white' : 'bg-white text-slate-600 border border-slate-200' ) . ' px-3 py-1.5 text-sm font-medium rounded-md">' . esc_html( (string) $i ) . '</a>';
+		}
+		echo '</div>';
+	}
+}
+
+/**
+ * Render the edit form for a single lead (form submission) row.
+ */
+function southcity_cms_render_lead_form( $lead_id ) {
+	$back_url = add_query_arg( [ 'view' => 'leads' ], southcity_cms_url() );
+	$lead     = $lead_id ? southcity_cms_get_purchase( $lead_id ) : null;
+
+	echo '<div class="mb-6">';
+	echo '<a href="' . esc_url( $back_url ) . '" class="text-sm font-medium text-slate-500 hover:text-slate-700">&larr; Back to list</a>';
+	echo '</div>';
+
+	if ( ! $lead ) {
+		echo '<div class="bg-white shadow rounded-lg p-10 text-center text-slate-500">Lead not found.</div>';
+		return;
+	}
+
+	echo '<div class="bg-white shadow rounded-lg p-6">';
+	echo '<form method="post" action="' . esc_url( southcity_cms_url() ) . '">';
+	wp_nonce_field( 'sc_save_lead_' . $lead->id, 'sc_lead_nonce' );
+	echo '<input type="hidden" name="lead_id" value="' . esc_attr( $lead->id ) . '">';
+	echo '<input type="hidden" name="sc_lead_save" value="1">';
+
+	$fields = [
+		'name'      => [ 'label' => 'Name', 'type' => 'text' ],
+		'phone'     => [ 'label' => 'Phone', 'type' => 'text' ],
+		'plot_size' => [ 'label' => 'Plot Size', 'type' => 'text' ],
+		'message'   => [ 'label' => 'Message', 'type' => 'textarea' ],
+	];
+
+	foreach ( $fields as $key => $field ) {
+		echo '<div class="mb-4">';
+		echo '<label class="block text-sm font-semibold text-slate-800 mb-1" for="sc-lead-' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label>';
+		if ( 'textarea' === $field['type'] ) {
+			echo '<textarea id="sc-lead-' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" rows="4" class="w-full rounded-md border border-slate-300 px-3 py-2">' . esc_textarea( $lead->$key ) . '</textarea>';
+		} else {
+			echo '<input type="text" id="sc-lead-' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $lead->$key ) . '" class="w-full rounded-md border border-slate-300 px-3 py-2">';
+		}
+		echo '</div>';
+	}
+
+	echo '<button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#14245C] hover:bg-[#0E1A44]">Update Lead</button>';
+	echo '</form>';
 	echo '</div>';
 }
 
@@ -237,6 +426,31 @@ function southcity_cms_render_homepage_form() {
 }
 
 /**
+ * Get a small preview image URL for a post's ACF "image" field, if any.
+ */
+function southcity_cms_get_thumb_url( $post_id ) {
+	$value = function_exists( 'get_field' ) ? get_field( 'image', $post_id ) : null;
+
+	if ( is_array( $value ) ) {
+		if ( ! empty( $value['sizes']['thumbnail'] ) ) {
+			return (string) $value['sizes']['thumbnail'];
+		}
+		if ( ! empty( $value['url'] ) ) {
+			return (string) $value['url'];
+		}
+	} elseif ( is_numeric( $value ) ) {
+		$src = wp_get_attachment_image_src( (int) $value, 'thumbnail' );
+		if ( $src ) {
+			return (string) $src[0];
+		}
+	} elseif ( is_string( $value ) && $value !== '' ) {
+		return $value;
+	}
+
+	return '';
+}
+
+/**
  * Render list of items for a Custom Post Type.
  */
 function southcity_cms_render_cpt_list( $post_type ) {
@@ -250,6 +464,10 @@ function southcity_cms_render_cpt_list( $post_type ) {
 
 	$new_url = add_query_arg( [ 'view' => $post_type, 'action' => 'new' ], southcity_cms_url() );
 
+	if ( isset( $_GET['deleted'] ) && 'true' === $_GET['deleted'] ) {
+		echo '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Item deleted successfully.</div>';
+	}
+
 	echo '<div class="mb-6 flex justify-end">';
 	echo '<a href="' . esc_url( $new_url ) . '" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#14245C] hover:bg-[#0E1A44]">+ Add New</a>';
 	echo '</div>';
@@ -262,10 +480,21 @@ function southcity_cms_render_cpt_list( $post_type ) {
 	echo '<div class="bg-white shadow rounded-lg overflow-hidden">';
 	echo '<ul class="divide-y divide-slate-200">';
 	foreach ( $posts as $p ) {
-		$edit_url = add_query_arg( [ 'view' => $post_type, 'action' => 'edit', 'post_id' => $p->ID ], southcity_cms_url() );
+		$edit_url   = add_query_arg( [ 'view' => $post_type, 'action' => 'edit', 'post_id' => $p->ID ], southcity_cms_url() );
+		$delete_url = wp_nonce_url( add_query_arg( [ 'sc_action' => 'delete_post', 'post_id' => $p->ID ], southcity_cms_url() ), 'sc_delete_post_' . $p->ID );
+		$thumb_url  = southcity_cms_get_thumb_url( $p->ID );
+
 		echo '<li class="px-6 py-4 flex items-center justify-between hover:bg-slate-50">';
-		echo '<div class="font-medium text-slate-900">' . esc_html( $p->post_title ? $p->post_title : '(No Title)' ) . '</div>';
-		echo '<div><a href="' . esc_url( $edit_url ) . '" class="text-blue-600 hover:text-blue-900 text-sm font-medium">Edit</a></div>';
+		echo '<div class="flex items-center gap-4 min-w-0">';
+		if ( $thumb_url ) {
+			echo '<img src="' . esc_url( $thumb_url ) . '" alt="" class="h-12 w-12 rounded-md object-cover flex-shrink-0 border border-slate-200">';
+		}
+		echo '<div class="font-medium text-slate-900 truncate">' . esc_html( $p->post_title ? $p->post_title : '(No Title)' ) . '</div>';
+		echo '</div>';
+		echo '<div class="flex items-center gap-4 flex-shrink-0">';
+		echo '<a href="' . esc_url( $edit_url ) . '" class="text-blue-600 hover:text-blue-900 text-sm font-medium">Edit</a>';
+		echo '<a href="' . esc_url( $delete_url ) . '" class="text-red-600 hover:text-red-900 text-sm font-medium" onclick="return confirm(\'Delete this item? It will be moved to Trash.\');">Delete</a>';
+		echo '</div>';
 		echo '</li>';
 	}
 	echo '</ul>';

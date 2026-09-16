@@ -88,13 +88,64 @@ function south_city_widgets_init(): void
 add_action('widgets_init', 'south_city_widgets_init');
 
 /**
- * Register language rewrite support for /bn/.
+ * Register language rewrite support for /bn/ (used when pretty permalinks
+ * and the server's rewrite rules are working correctly).
  */
 function south_city_register_language_routes(): void
 {
-    add_rewrite_rule('^bn/?$', 'index.php?south_city_lang=bn', 'top');
+    $front_page_id = (int) get_option('page_on_front');
+    $target        = $front_page_id > 0
+        ? 'index.php?page_id=' . $front_page_id . '&south_city_lang=bn'
+        : 'index.php?south_city_lang=bn';
+
+    add_rewrite_rule('^bn/?$', $target, 'top');
 }
 add_action('init', 'south_city_register_language_routes');
+
+/**
+ * Force /bn/ to load the real front page directly from the raw request
+ * path, bypassing WordPress's cached rewrite-rules matching entirely.
+ * This is a safety net for hosts where flush_rewrite_rules() doesn't take
+ * effect (stale rewrite cache, read-only .htaccess, etc.) and the request
+ * would otherwise fall through and get redirected back to "/".
+ */
+function south_city_force_bn_homepage_query(WP $wp): void
+{
+    $request_path = trim((string) wp_parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH), '/');
+    $home_path    = trim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/');
+
+    if ($home_path !== '' && str_starts_with($request_path, $home_path)) {
+        $request_path = trim(substr($request_path, strlen($home_path)), '/');
+    }
+
+    if ($request_path !== 'bn') {
+        return;
+    }
+
+    $front_page_id = (int) get_option('page_on_front');
+
+    $wp->query_vars = ['south_city_lang' => 'bn'];
+
+    if ($front_page_id > 0) {
+        $wp->query_vars['page_id'] = $front_page_id;
+    }
+}
+add_action('parse_request', 'south_city_force_bn_homepage_query');
+
+/**
+ * Without this, WordPress's own canonical-redirect logic sees /bn/ resolving
+ * to the same page object as the front page and 301s back to "/" to avoid
+ * "duplicate content" — which is exactly the bug this route needs to avoid.
+ */
+function south_city_skip_canonical_redirect_for_bn(string|false $redirect_url): string|false
+{
+    if (get_query_var('south_city_lang') === 'bn') {
+        return false;
+    }
+
+    return $redirect_url;
+}
+add_filter('redirect_canonical', 'south_city_skip_canonical_redirect_for_bn');
 
 /**
  * Allow the theme to read custom language query vars.
@@ -129,6 +180,36 @@ function south_city_after_switch_theme(): void
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'south_city_after_switch_theme');
+
+/**
+ * Create the "About Us" page (using page-about.php) once, without needing a
+ * theme deactivate/reactivate cycle on sites where the theme is already active.
+ */
+function south_city_maybe_create_about_page(): void
+{
+    if (get_option('south_city_about_page_created')) {
+        return;
+    }
+
+    if (south_city_about_page_id() > 0) {
+        update_option('south_city_about_page_created', '1');
+        return;
+    }
+
+    $page_id = wp_insert_post([
+        'post_title'   => 'About Us',
+        'post_status'  => 'publish',
+        'post_type'    => 'page',
+        'post_content' => '',
+    ]);
+
+    if ($page_id && ! is_wp_error($page_id)) {
+        update_post_meta($page_id, '_wp_page_template', 'page-about.php');
+    }
+
+    update_option('south_city_about_page_created', '1');
+}
+add_action('init', 'south_city_maybe_create_about_page', 20);
 
 /**
  * Keep South City CPT archives sorted by admin sort order.
@@ -371,6 +452,10 @@ function south_city_translate(string $key, ?string $language = null): string
         'amenities' => [
             'en' => 'Amenities',
             'bn' => 'সুযোগ-সুবিধা',
+        ],
+        'about_us' => [
+            'en' => 'About Us',
+            'bn' => 'আমাদের সম্পর্কে',
         ],
         'contact' => [
             'en' => 'Contact',
@@ -711,8 +796,7 @@ function south_city_translate(string $key, ?string $language = null): string
 function south_city_default_nav_items(?string $language = null): array
 {
     $language = $language ?: south_city_current_language();
-
-    return [
+    $items    = [
         [
             'href' => '#overview',
             'label' => south_city_translate('overview', $language),
@@ -738,12 +822,61 @@ function south_city_default_nav_items(?string $language = null): array
             'label' => south_city_translate('amenities', $language),
             'spy' => 'amenities',
         ],
-        [
-            'href' => '#contact',
-            'label' => south_city_translate('contact', $language),
-            'spy' => 'contact',
-        ],
     ];
+
+    $about_page_id = south_city_about_page_id();
+
+    if ($about_page_id > 0) {
+        $items[] = [
+            'href' => get_permalink($about_page_id),
+            'label' => south_city_translate('about_us', $language),
+            'spy' => '',
+        ];
+    }
+
+    $items[] = [
+        'href' => '#contact',
+        'label' => south_city_translate('contact', $language),
+        'spy' => 'contact',
+    ];
+
+    if (! is_front_page()) {
+        $home_url = trailingslashit($language === 'bn' ? home_url('/bn/') : home_url('/'));
+
+        foreach ($items as &$item) {
+            if (str_starts_with($item['href'], '#')) {
+                $item['href'] = $home_url . $item['href'];
+            }
+        }
+        unset($item);
+    }
+
+    return $items;
+}
+
+/**
+ * Find the published page using the About Us template, if one exists.
+ */
+function south_city_about_page_id(): int
+{
+    static $page_id = null;
+
+    if ($page_id !== null) {
+        return $page_id;
+    }
+
+    $pages = get_posts([
+        'post_type'      => 'page',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'meta_key'       => '_wp_page_template',
+        'meta_value'     => 'page-about.php',
+        'fields'         => 'ids',
+    ]);
+
+    $page_id = ! empty($pages) ? (int) $pages[0] : 0;
+
+    return $page_id;
 }
 
 /**
@@ -851,11 +984,22 @@ function south_city_inline_icon(string $key): string
         'route'     => '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 16.5 16 7.5M9 6H7a3 3 0 0 0 0 6h10a3 3 0 0 1 0 6h-2"/>',
         'water'     => '<path d="M4 14c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2M4 18c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2M12 3s5 5 5 8a5 5 0 0 1-10 0c0-3 5-8 5-8Z"/>',
         'check'     => '<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5L16 9"/>',
+        'mail'      => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
     ];
 
     $inner = $paths[$key] ?? $paths['check'];
 
     return '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $inner . '</svg>';
+}
+
+/**
+ * Return the official WhatsApp glyph as an inline SVG (fills currentColor).
+ */
+function south_city_whatsapp_icon(string $classes = 'h-5 w-5'): string
+{
+    return '<svg class="' . esc_attr($classes) . '" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true" focusable="false">'
+        . '<path d="M16.001 3C9.096 3 3.5 8.596 3.5 15.5c0 2.31.63 4.474 1.727 6.33L3 29l7.353-2.184a12.42 12.42 0 0 0 5.648 1.35h.005c6.905 0 12.5-5.596 12.5-12.5S22.906 3 16.001 3Zm0 22.7h-.004a10.36 10.36 0 0 1-5.283-1.447l-.379-.225-3.94 1.17 1.052-3.842-.247-.394a10.34 10.34 0 0 1-1.6-5.462c0-5.723 4.658-10.38 10.405-10.38 2.78 0 5.392 1.083 7.354 3.05a10.32 10.32 0 0 1 3.046 7.35c0 5.723-4.657 10.38-10.404 10.38Zm5.697-7.777c-.312-.156-1.848-.912-2.134-1.016-.286-.104-.494-.156-.702.156-.208.312-.806 1.016-.988 1.225-.182.208-.364.234-.676.078-.312-.156-1.318-.486-2.51-1.55-.928-.828-1.555-1.85-1.737-2.162-.182-.312-.02-.481.137-.636.14-.14.312-.364.468-.546.156-.182.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.702-1.693-.962-2.319-.253-.61-.51-.527-.702-.537-.182-.008-.39-.01-.598-.01a1.15 1.15 0 0 0-.832.39c-.286.312-1.092 1.068-1.092 2.605s1.118 3.02 1.274 3.228c.156.208 2.2 3.36 5.33 4.712.745.322 1.325.514 1.778.658.747.238 1.427.204 1.965.124.6-.09 1.848-.756 2.108-1.485.26-.73.26-1.354.182-1.485-.078-.13-.286-.208-.598-.364Z"/>'
+        . '</svg>';
 }
 
 /**
@@ -916,9 +1060,8 @@ function south_city_paragraphs(string $text): array
 function south_city_amenity_groups(): array
 {
     return [
-        'core'           => 'amenities_group_core',
-        'infrastructure' => 'amenities_group_infrastructure',
-        'security'       => 'amenities_group_security',
+        'core'     => 'amenities_group_core',
+        'security' => 'amenities_group_security',
     ];
 }
 

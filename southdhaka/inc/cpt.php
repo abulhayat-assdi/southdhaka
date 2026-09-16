@@ -134,6 +134,30 @@ function south_city_register_post_types(): void
         'supports'     => ['title', 'editor', 'thumbnail', 'page-attributes'],
     ]);
 
+    register_post_type('southcity_location', [
+        'labels' => [
+            'name'               => __('Locations', 'south-city'),
+            'singular_name'      => __('Location', 'south-city'),
+            'menu_name'          => __('Location Manager', 'south-city'),
+            'add_new_item'       => __('Add New Location', 'south-city'),
+            'edit_item'          => __('Edit Location', 'south-city'),
+            'new_item'           => __('New Location', 'south-city'),
+            'view_item'          => __('View Location', 'south-city'),
+            'search_items'       => __('Search Locations', 'south-city'),
+            'not_found'          => __('No locations found.', 'south-city'),
+            'not_found_in_trash' => __('No locations found in Trash.', 'south-city'),
+            'all_items'          => __('All Locations', 'south-city'),
+            'archives'           => __('Location Archives', 'south-city'),
+        ],
+        'public'              => true,
+        'exclude_from_search' => true,
+        'has_archive'         => false,
+        'rewrite'             => ['slug' => 'locations'],
+        'menu_icon'           => 'dashicons-location-alt',
+        'show_in_rest'        => true,
+        'supports'            => ['title', 'page-attributes'],
+    ]);
+
     register_post_type('southcity_gallery', [
         'labels' => [
             'name'               => __('Gallery Images', 'south-city'),
@@ -207,3 +231,64 @@ function south_city_register_taxonomies(): void
     ]);
 }
 add_action('init', 'south_city_register_taxonomies');
+
+/**
+ * Only one location can be the homepage map pin at a time, so unset the
+ * flag on every other location whenever one is saved as primary.
+ */
+function south_city_enforce_single_primary_location(int $post_id): void
+{
+    if (get_post_type($post_id) !== 'southcity_location') {
+        return;
+    }
+
+    if (! function_exists('get_field') || ! get_field('is_primary', $post_id)) {
+        return;
+    }
+
+    $other_locations = get_posts([
+        'post_type'      => 'southcity_location',
+        'posts_per_page' => -1,
+        'post_status'    => 'any',
+        'post__not_in'   => [$post_id],
+        'fields'         => 'ids',
+    ]);
+
+    foreach ($other_locations as $other_id) {
+        if (function_exists('update_field')) {
+            update_field('is_primary', 0, $other_id);
+        }
+    }
+}
+add_action('acf/save_post', 'south_city_enforce_single_primary_location', 20);
+
+/**
+ * Get the location currently marked as the homepage map pin, falling back
+ * to the oldest location record if none is explicitly marked.
+ */
+function south_city_get_primary_location(): ?WP_Post
+{
+    $primary = get_posts([
+        'post_type'      => 'southcity_location',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        'meta_key'       => 'is_primary',
+        'meta_value'     => '1',
+        'orderby'        => 'date',
+        'order'          => 'ASC',
+    ]);
+
+    if (! empty($primary)) {
+        return $primary[0];
+    }
+
+    $fallback = get_posts([
+        'post_type'      => 'southcity_location',
+        'posts_per_page' => 1,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'ASC',
+    ]);
+
+    return $fallback[0] ?? null;
+}

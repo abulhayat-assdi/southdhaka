@@ -225,7 +225,7 @@ function south_city_seed_default_content(): void
         'facebook_url' => 'https://www.facebook.com/SouthDhakaHousing.Ltd',
         'youtube_url' => '',
         'linkedin_url' => '',
-        'brochure_pdf' => SOUTH_CITY_THEME_URI . '/assets/brochure.pdf',
+        'brochure_pdf' => '',
         'map_query' => 'South City Sayedpur Keraniganj Dhaka',
         'whatsapp_message_en' => "Assalamu Alaikum, I'm interested in South City plots.",
         'whatsapp_message_bn' => 'আসসালামু আলাইকুম, আমি সাউথ সিটির প্লট সম্পর্কে জানতে আগ্রহী।',

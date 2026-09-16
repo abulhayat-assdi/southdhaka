@@ -22,20 +22,20 @@ $master_plan_image = south_city_asset_url(south_city_get_field_or_meta('master_p
 $hotspots          = (array) south_city_get_field_or_meta('master_plan_hotspots', get_the_ID(), []);
 $distances         = (array) south_city_get_field_or_meta('location_distances', get_the_ID(), []);
 $boundaries        = (array) south_city_get_field_or_meta('project_boundaries', get_the_ID(), []);
-$map_query         = (string) south_city_get_option('map_query', 'South City Sayedpur Keraniganj Dhaka');
-$map_src           = 'https://www.google.com/maps?q=' . rawurlencode($map_query) . '&z=13&output=embed';
+$primary_location  = function_exists('south_city_get_primary_location') ? south_city_get_primary_location() : null;
+
+if ($primary_location) {
+    $map_lat  = (string) get_field('latitude', $primary_location->ID);
+    $map_lng  = (string) get_field('longitude', $primary_location->ID);
+    $map_zoom = (int) (get_field('zoom', $primary_location->ID) ?: 15);
+    $map_src  = 'https://www.google.com/maps?q=' . rawurlencode($map_lat . ',' . $map_lng) . '&z=' . $map_zoom . '&output=embed';
+} else {
+    $map_query = (string) south_city_get_option('map_query', 'South City Sayedpur Keraniganj Dhaka');
+    $map_src   = 'https://www.google.com/maps?q=' . rawurlencode($map_query) . '&z=13&output=embed';
+}
 $brochure          = south_city_get_option('brochure_pdf', '');
 $brochure_url      = south_city_asset_url($brochure, 'full');
-$web3forms_key     = (string) south_city_get_field_or_meta('web3forms_key', get_the_ID(), '');
-$whatsapp_number   = preg_replace('/\D+/', '', (string) south_city_get_option('whatsapp', '8801886175263'));
 
-$chairman_body     = south_city_paragraphs(south_city_get_locale_field('chairman_body', get_the_ID(), $language));
-$chairman_name     = south_city_get_locale_field('chairman_name', get_the_ID(), $language);
-$chairman_image    = south_city_asset_url(south_city_get_field_or_meta('chairman_image', get_the_ID()), 'large');
-$project_summary   = (array) south_city_get_field_or_meta('project_summary', get_the_ID(), []);
-$md_body           = south_city_paragraphs(south_city_get_locale_field('md_body', get_the_ID(), $language));
-$md_name           = south_city_get_locale_field('md_name', get_the_ID(), $language);
-$md_image          = south_city_asset_url(south_city_get_field_or_meta('md_image', get_the_ID()), 'large');
 $about_text        = south_city_get_locale_field('about_text', get_the_ID(), $language);
 $vision_text       = south_city_get_locale_field('vision_text', get_the_ID(), $language);
 $mission_text      = south_city_get_locale_field('mission_text', get_the_ID(), $language);
@@ -44,14 +44,6 @@ $why_points        = (array) south_city_get_field_or_meta('why_points', get_the_
 $investment_intro  = south_city_get_locale_field('investment_intro', get_the_ID(), $language);
 $investment_points = (array) south_city_get_field_or_meta('investment_points', get_the_ID(), []);
 $ownership_steps   = (array) south_city_get_field_or_meta('ownership_steps', get_the_ID(), []);
-
-if ($chairman_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img/hero.webp')) {
-    $chairman_image = SOUTH_CITY_THEME_URI . '/assets/img/hero.webp';
-}
-
-if ($md_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img/amenities-bg.webp')) {
-    $md_image = SOUTH_CITY_THEME_URI . '/assets/img/amenities-bg.webp';
-}
 
 if ($hero_headline === '') {
     $hero_headline = $language === 'bn' ? 'যেখানে আপনার স্বপ্নেরা তার ঠিকানা খুঁজে পায়' : 'Where Your Dreams Find Their Address';
@@ -110,53 +102,102 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
         </div>
     </section>
 
-    <?php if (! empty($chairman_body)) : ?>
-        <section id="chairman" class="section-pad bg-white sc-section">
-            <div class="container-c">
-                <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
-                    <div class="reveal">
-                        <p class="eyebrow"><?php echo esc_html(south_city_translate('chairman_eyebrow', $language)); ?></p>
-                        <h2 class="sc-display"><?php echo esc_html(south_city_translate('chairman_title', $language)); ?></h2>
-                        <span class="sc-divider" aria-hidden="true"></span>
-                        <div class="sc-message">
-                            <?php foreach ($chairman_body as $paragraph) : ?>
-                                <p><?php echo esc_html($paragraph); ?></p>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php if ($chairman_name !== '') : ?>
-                            <p class="sc-signoff">
-                                <span class="sc-signoff__role"><?php echo esc_html(south_city_translate('chairman_role', $language)); ?></span>
-                                <?php echo esc_html($chairman_name); ?>
-                            </p>
-                        <?php endif; ?>
+    <section id="overview" class="section-pad bg-white">
+        <div class="container-c">
+            <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+                <div>
+                    <div class="reveal mb-8 md:mb-12">
+                        <p class="eyebrow"><?php echo esc_html(south_city_translate('overview_eyebrow', $language)); ?></p>
+                        <h2><?php echo esc_html(south_city_translate('overview_title', $language)); ?></h2>
                     </div>
-                    <?php if ($chairman_image !== '') : ?>
-                        <div class="reveal sc-message-media">
-                            <img src="<?php echo esc_url($chairman_image); ?>" alt="" class="rounded-xl border border-line object-cover shadow-card" loading="lazy" aria-hidden="true">
-                        </div>
+                    <?php if ($overview_text !== '') : ?>
+                        <p class="reveal max-w-prose text-[17px] leading-relaxed text-muted"><?php echo esc_html($overview_text); ?></p>
                     <?php endif; ?>
                 </div>
 
-                <?php if (! empty($project_summary)) : ?>
-                    <div class="reveal mt-12">
-                        <h3 class="sc-subtitle"><?php echo esc_html(south_city_translate('summary_title', $language)); ?></h3>
-                        <ul class="sc-summary-grid" role="list">
-                            <?php foreach ($project_summary as $item) : ?>
-                                <?php
-                                $item        = (array) $item;
-                                $summary_val = south_city_get_locale_row_value($item, 'value', $language);
-                                $summary_lbl = south_city_get_locale_row_value($item, 'label', $language);
-                                ?>
-                                <li class="sc-summary-item">
-                                    <span class="sc-summary-item__icon" aria-hidden="true"><?php echo south_city_inline_icon((string) ($item['icon'] ?? 'check')); ?></span>
-                                    <span class="sc-summary-item__value"><?php echo esc_html($summary_val); ?></span>
-                                    <span class="sc-summary-item__label"><?php echo esc_html($summary_lbl); ?></span>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                        <p class="sc-summary-note"><?php echo esc_html(south_city_translate('summary_footnote', $language)); ?></p>
+                <?php if (! empty($overview_counters)) : ?>
+                    <div class="grid grid-cols-2 content-center gap-4 sm:gap-6">
+                        <?php foreach ($overview_counters as $counter) : ?>
+                            <?php
+                            $counter = (array) $counter;
+                            $display = south_city_get_locale_row_value($counter, 'display', $language);
+                            $label   = south_city_get_locale_row_value($counter, 'label', $language);
+                            ?>
+                            <div class="reveal card flex flex-col items-center justify-center px-4 py-7 text-center">
+                                <span
+                                    class="counter font-display text-3xl font-extrabold text-navy sm:text-4xl"
+                                    data-end="<?php echo esc_attr((string) ($counter['end'] ?? '')); ?>"
+                                    data-final="<?php echo esc_attr($display); ?>"
+                                    data-bn="<?php echo esc_attr($language === 'bn' ? '1' : ''); ?>"
+                                >
+                                    <?php echo esc_html($display); ?>
+                                </span>
+                                <span class="mt-2 h-0.5 w-8 bg-gold" aria-hidden="true"></span>
+                                <span class="mt-2 text-sm font-medium text-muted"><?php echo esc_html($label); ?></span>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <?php $facts_query = south_city_ordered_query('southcity_fact'); ?>
+    <?php if ($facts_query->have_posts()) : ?>
+        <section class="section-pad bg-bg-soft">
+            <div class="container-c">
+                <div class="reveal mb-8 md:mb-12">
+                    <p class="eyebrow"><?php echo esc_html(south_city_translate('facts_eyebrow', $language)); ?></p>
+                    <h2><?php echo esc_html(south_city_translate('facts_title', $language)); ?></h2>
+                </div>
+                <dl class="grid gap-x-12 md:grid-cols-2">
+                    <?php $fact_index = 1; ?>
+                    <?php while ($facts_query->have_posts()) : ?>
+                        <?php $facts_query->the_post(); ?>
+                        <div class="reveal flex items-baseline gap-4 border-b border-line py-4">
+                            <span class="font-display text-sm font-bold text-gold" aria-hidden="true"><?php echo esc_html(str_pad((string) $fact_index, 2, '0', STR_PAD_LEFT)); ?></span>
+                            <dt class="w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-muted sm:w-40"><?php echo esc_html(south_city_get_locale_field('label', get_the_ID(), $language)); ?></dt>
+                            <dd class="flex-1 font-medium text-navy"><?php echo esc_html(south_city_get_locale_field('value', get_the_ID(), $language)); ?></dd>
+                        </div>
+                        <?php $fact_index++; ?>
+                    <?php endwhile; ?>
+                </dl>
+                <?php if ($brochure_url !== '') : ?>
+                    <div class="reveal mt-8">
+                        <a href="<?php echo esc_url($brochure_url); ?>" class="btn-gold" download data-track="brochure_download">
+                            <?php echo esc_html(south_city_translate('download_brochure', $language)); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+        <?php wp_reset_postdata(); ?>
+    <?php endif; ?>
+
+    <?php if (! empty($why_points)) : ?>
+        <section id="why" class="section-pad bg-white sc-section">
+            <div class="container-c">
+                <div class="reveal mb-8 md:mb-12">
+                    <p class="eyebrow"><?php echo esc_html(south_city_translate('why_eyebrow', $language)); ?></p>
+                    <h2 class="sc-display"><?php echo esc_html(south_city_translate('why_title', $language)); ?></h2>
+                    <span class="sc-divider" aria-hidden="true"></span>
+                </div>
+                <ul class="sc-why-grid" role="list">
+                    <?php foreach ($why_points as $point) : ?>
+                        <?php
+                        $point      = (array) $point;
+                        $why_title  = south_city_get_locale_row_value($point, 'title', $language);
+                        $why_body   = south_city_get_locale_row_value($point, 'body', $language);
+                        ?>
+                        <li class="reveal sc-why-item">
+                            <span class="sc-why-item__icon" aria-hidden="true"><?php echo south_city_inline_icon((string) ($point['icon'] ?? 'check')); ?></span>
+                            <div>
+                                <h3><?php echo esc_html($why_title); ?></h3>
+                                <p><?php echo esc_html($why_body); ?></p>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </section>
     <?php endif; ?>
@@ -205,138 +246,6 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                 </div>
             </div>
         </section>
-    <?php endif; ?>
-
-    <section id="overview" class="section-pad bg-white">
-        <div class="container-c">
-            <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
-                <div>
-                    <div class="reveal mb-8 md:mb-12">
-                        <p class="eyebrow"><?php echo esc_html(south_city_translate('overview_eyebrow', $language)); ?></p>
-                        <h2><?php echo esc_html(south_city_translate('overview_title', $language)); ?></h2>
-                    </div>
-                    <?php if ($overview_text !== '') : ?>
-                        <p class="reveal max-w-prose text-[17px] leading-relaxed text-muted"><?php echo esc_html($overview_text); ?></p>
-                    <?php endif; ?>
-                </div>
-
-                <?php if (! empty($overview_counters)) : ?>
-                    <div class="grid grid-cols-2 content-center gap-4 sm:gap-6">
-                        <?php foreach ($overview_counters as $counter) : ?>
-                            <?php
-                            $counter = (array) $counter;
-                            $display = south_city_get_locale_row_value($counter, 'display', $language);
-                            $label   = south_city_get_locale_row_value($counter, 'label', $language);
-                            ?>
-                            <div class="reveal card flex flex-col items-center justify-center px-4 py-7 text-center">
-                                <span
-                                    class="counter font-display text-3xl font-extrabold text-navy sm:text-4xl"
-                                    data-end="<?php echo esc_attr((string) ($counter['end'] ?? '')); ?>"
-                                    data-final="<?php echo esc_attr($display); ?>"
-                                    data-bn="<?php echo esc_attr($language === 'bn' ? '1' : ''); ?>"
-                                >
-                                    <?php echo esc_html($display); ?>
-                                </span>
-                                <span class="mt-2 h-0.5 w-8 bg-gold" aria-hidden="true"></span>
-                                <span class="mt-2 text-sm font-medium text-muted"><?php echo esc_html($label); ?></span>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </section>
-
-    <?php if (! empty($why_points)) : ?>
-        <section id="why" class="section-pad bg-white sc-section">
-            <div class="container-c">
-                <div class="reveal mb-8 md:mb-12">
-                    <p class="eyebrow"><?php echo esc_html(south_city_translate('why_eyebrow', $language)); ?></p>
-                    <h2 class="sc-display"><?php echo esc_html(south_city_translate('why_title', $language)); ?></h2>
-                    <span class="sc-divider" aria-hidden="true"></span>
-                </div>
-                <ul class="sc-why-grid" role="list">
-                    <?php foreach ($why_points as $point) : ?>
-                        <?php
-                        $point      = (array) $point;
-                        $why_title  = south_city_get_locale_row_value($point, 'title', $language);
-                        $why_body   = south_city_get_locale_row_value($point, 'body', $language);
-                        ?>
-                        <li class="reveal sc-why-item">
-                            <span class="sc-why-item__icon" aria-hidden="true"><?php echo south_city_inline_icon((string) ($point['icon'] ?? 'check')); ?></span>
-                            <div>
-                                <h3><?php echo esc_html($why_title); ?></h3>
-                                <p><?php echo esc_html($why_body); ?></p>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </section>
-    <?php endif; ?>
-
-    <?php $trust_query = south_city_ordered_query('southcity_badge'); ?>
-    <?php if ($trust_query->have_posts()) : ?>
-        <section class="section-pad bg-navy-deep">
-            <div class="container-c">
-                <div class="reveal mb-8 text-center md:mb-12">
-                    <p class="eyebrow !text-gold-light justify-center"><?php echo esc_html(south_city_translate('trust_eyebrow', $language)); ?></p>
-                    <h2 class="!text-white"><?php echo esc_html(south_city_translate('trust_title', $language)); ?></h2>
-                </div>
-                <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6" role="list">
-                    <?php while ($trust_query->have_posts()) : ?>
-                        <?php $trust_query->the_post(); ?>
-                        <?php
-                        $icon = (string) south_city_get_field_or_meta('icon', get_the_ID(), 'check');
-                        $icon_image = south_city_icon_image_url($icon);
-                        ?>
-                        <li class="reveal flex flex-col items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-6 text-center">
-                            <span class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-gold/15 text-gold-light shadow-lg ring-2 ring-gold/35">
-                                <?php if ($icon_image !== '') : ?>
-                                    <img src="<?php echo esc_url($icon_image); ?>" alt="" class="h-full w-full object-cover" loading="lazy" aria-hidden="true">
-                                <?php else : ?>
-                                    <?php echo esc_html($icon !== '' ? $icon : '✓'); ?>
-                                <?php endif; ?>
-                            </span>
-                            <span class="text-sm font-semibold leading-snug text-white"><?php echo esc_html(south_city_get_locale_field('label', get_the_ID(), $language)); ?></span>
-                        </li>
-                    <?php endwhile; ?>
-                </ul>
-            </div>
-        </section>
-        <?php wp_reset_postdata(); ?>
-    <?php endif; ?>
-
-    <?php $facts_query = south_city_ordered_query('southcity_fact'); ?>
-    <?php if ($facts_query->have_posts()) : ?>
-        <section class="section-pad bg-bg-soft">
-            <div class="container-c">
-                <div class="reveal mb-8 md:mb-12">
-                    <p class="eyebrow"><?php echo esc_html(south_city_translate('facts_eyebrow', $language)); ?></p>
-                    <h2><?php echo esc_html(south_city_translate('facts_title', $language)); ?></h2>
-                </div>
-                <dl class="grid gap-x-12 md:grid-cols-2">
-                    <?php $fact_index = 1; ?>
-                    <?php while ($facts_query->have_posts()) : ?>
-                        <?php $facts_query->the_post(); ?>
-                        <div class="reveal flex items-baseline gap-4 border-b border-line py-4">
-                            <span class="font-display text-sm font-bold text-gold" aria-hidden="true"><?php echo esc_html(str_pad((string) $fact_index, 2, '0', STR_PAD_LEFT)); ?></span>
-                            <dt class="w-32 shrink-0 text-sm font-semibold uppercase tracking-wide text-muted sm:w-40"><?php echo esc_html(south_city_get_locale_field('label', get_the_ID(), $language)); ?></dt>
-                            <dd class="flex-1 font-medium text-navy"><?php echo esc_html(south_city_get_locale_field('value', get_the_ID(), $language)); ?></dd>
-                        </div>
-                        <?php $fact_index++; ?>
-                    <?php endwhile; ?>
-                </dl>
-                <?php if ($brochure_url !== '') : ?>
-                    <div class="reveal mt-8">
-                        <a href="<?php echo esc_url($brochure_url); ?>" class="btn-gold" download data-track="brochure_download">
-                            <?php echo esc_html(south_city_translate('download_brochure', $language)); ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
-        <?php wp_reset_postdata(); ?>
     <?php endif; ?>
 
     <section id="master-plan" class="section-pad bg-white sc-section">
@@ -756,11 +665,7 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                 <p class="mx-auto mt-3 max-w-xl text-white/80"><?php echo esc_html(south_city_translate('contact_subtitle', $language)); ?></p>
             </div>
 
-            <form id="lead-form" class="reveal rounded-2xl bg-white p-5 shadow-card sm:p-8" method="post" action="https://api.web3forms.com/submit" data-wa="<?php echo esc_attr($whatsapp_number); ?>">
-                <?php if ($web3forms_key !== '') : ?>
-                    <input type="hidden" name="access_key" value="<?php echo esc_attr($web3forms_key); ?>">
-                <?php endif; ?>
-                <input type="hidden" name="subject" value="<?php echo esc_attr__('South City website lead', 'south-city'); ?>">
+            <form id="lead-form" class="reveal rounded-2xl bg-white p-5 shadow-card sm:p-8" method="post">
                 <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
@@ -789,11 +694,11 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                         <input id="lf-msg" name="message" type="text" class="h-12 w-full rounded-md border border-line px-3.5 text-base text-ink focus:border-gold">
                     </div>
                 </div>
-                <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                <div class="mt-6">
                     <button type="submit" id="lf-submit" class="btn-gold w-full" data-track="form_submit"><?php echo esc_html(south_city_translate('form_submit', $language)); ?></button>
-                    <button type="button" id="lf-wa" class="btn-wa w-full" data-track="whatsapp_click"><?php echo esc_html(south_city_translate('form_whatsapp', $language)); ?></button>
                 </div>
                 <p id="lf-error" class="mt-3 hidden text-center text-sm font-medium text-red-600"><?php echo esc_html($language === 'bn' ? 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।' : 'Something went wrong. Please try again.'); ?></p>
+                <p id="lf-success" class="mt-3 hidden text-center text-sm font-medium text-emerald-600"><?php echo esc_html($language === 'bn' ? 'ধন্যবাদ! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।' : 'Thank you! We will get back to you shortly.'); ?></p>
             </form>
         </div>
     </section>

@@ -1,6 +1,34 @@
 (function () {
     'use strict';
 
+    var logSouthCityEvent = function (action, fields) {
+        var config = window.southCityLeads;
+
+        if (!config || !config.ajaxUrl || !config.nonce) {
+            return;
+        }
+
+        var body = new URLSearchParams();
+        body.set('action', action);
+        body.set('nonce', config.nonce);
+        body.set('source', window.location.href);
+
+        Object.keys(fields || {}).forEach(function (key) {
+            body.set(key, fields[key] || '');
+        });
+
+        try {
+            fetch(config.ajaxUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body.toString(),
+                keepalive: true
+            });
+        } catch (error) {
+            // Network/analytics failure should never block the visitor's action.
+        }
+    };
+
     var header = document.getElementById('site-header');
     var menuButton = document.getElementById('menu-btn');
     var mobileMenu = document.getElementById('mobile-menu');
@@ -75,6 +103,20 @@
 
         if (typeof window.fbq === 'function') {
             window.fbq('trackCustom', eventName);
+        }
+
+        if (eventName === 'whatsapp_click') {
+            var lfName = document.getElementById('lf-name');
+            var lfPhone = document.getElementById('lf-phone');
+            var lfPlot = document.getElementById('lf-plot');
+            var lfMessage = document.getElementById('lf-msg');
+
+            logSouthCityEvent('sc_log_lead', {
+                name: lfName instanceof HTMLInputElement ? lfName.value.trim() : '',
+                phone: lfPhone instanceof HTMLInputElement ? lfPhone.value.trim() : '',
+                plot_size: lfPlot instanceof HTMLSelectElement ? lfPlot.value : '',
+                message: lfMessage instanceof HTMLInputElement ? lfMessage.value.trim() : ''
+            });
         }
     });
 
@@ -318,9 +360,21 @@
             return /^(?:\+?880|0)1[3-9]\d{8}$/.test(normalizePhone(value));
         };
 
+        var successBox = document.getElementById('lf-success');
+
         leadForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
             if (!(phone instanceof HTMLInputElement)) {
                 return;
+            }
+
+            if (errorBox) {
+                errorBox.classList.add('hidden');
+            }
+
+            if (successBox) {
+                successBox.classList.add('hidden');
             }
 
             var phoneIsValid = isValidPhone(phone.value);
@@ -330,36 +384,75 @@
             }
 
             if (!phoneIsValid) {
-                event.preventDefault();
-
                 if (errorBox) {
                     errorBox.classList.remove('hidden');
                 }
 
+                return;
+            }
+
+            var botcheck = leadForm.querySelector('[name="botcheck"]');
+
+            if (botcheck instanceof HTMLInputElement && botcheck.checked) {
+                return;
+            }
+
+            var config = window.southCityLeads;
+
+            if (!config || !config.ajaxUrl || !config.nonce) {
+                if (errorBox) {
+                    errorBox.classList.remove('hidden');
+                }
+
+                return;
+            }
+
+            var nameField = document.getElementById('lf-name');
+            var plotField = document.getElementById('lf-plot');
+            var messageField = document.getElementById('lf-msg');
+
+            if (submitButton instanceof HTMLButtonElement) {
+                submitButton.disabled = true;
+            }
+
+            var body = new URLSearchParams();
+            body.set('action', 'sc_log_purchase');
+            body.set('nonce', config.nonce);
+            body.set('source', window.location.href);
+            body.set('name', nameField instanceof HTMLInputElement ? nameField.value.trim() : '');
+            body.set('phone', phone.value.trim());
+            body.set('plot_size', plotField instanceof HTMLSelectElement ? plotField.value : '');
+            body.set('message', messageField instanceof HTMLInputElement ? messageField.value.trim() : '');
+
+            fetch(config.ajaxUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: body.toString()
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
                 if (submitButton instanceof HTMLButtonElement) {
                     submitButton.disabled = false;
                 }
-            }
-        });
 
-        var whatsappButton = document.getElementById('lf-wa');
+                if (data && data.success) {
+                    leadForm.reset();
 
-        if (whatsappButton) {
-            whatsappButton.addEventListener('click', function () {
-                var language = document.documentElement.getAttribute('data-site-language') || 'en';
-                var name = document.getElementById('lf-name');
-                var plot = document.getElementById('lf-plot');
-                var message = document.getElementById('lf-msg');
-                var whatsapp = leadForm.getAttribute('data-wa') || '';
-                var nameValue = name instanceof HTMLInputElement ? name.value.trim() : '';
-                var plotValue = plot instanceof HTMLSelectElement ? plot.value : '';
-                var messageValue = message instanceof HTMLInputElement ? message.value.trim() : '';
-                var text = language === 'bn'
-                    ? ('আসসালামু আলাইকুম, আমি ' + (nameValue || '') + (plotValue ? ', ' + plotValue + ' প্লটে আগ্রহী। ' : ', সাউথ সিটির প্লটে আগ্রহী। ') + messageValue).trim()
-                    : ('Assalamu Alaikum, I am ' + (nameValue || 'interested') + (plotValue ? ', interested in a ' + plotValue + ' plot. ' : ' in South City plots. ') + messageValue).trim();
+                    if (successBox) {
+                        successBox.classList.remove('hidden');
+                    }
+                } else if (errorBox) {
+                    errorBox.classList.remove('hidden');
+                }
+            }).catch(function () {
+                if (submitButton instanceof HTMLButtonElement) {
+                    submitButton.disabled = false;
+                }
 
-                window.open('https://wa.me/' + whatsapp + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+                if (errorBox) {
+                    errorBox.classList.remove('hidden');
+                }
             });
-        }
+        });
     }
 })();
