@@ -16,7 +16,7 @@ if (! defined('ABSPATH')) {
  * Bump this whenever the seed content below changes so an already-active
  * site re-applies it on the next request (see the init hook in functions.php).
  */
-const SOUTH_CITY_SEED_VERSION = 4;
+const SOUTH_CITY_SEED_VERSION = 5;
 
 function south_city_upsert_seed_post(string $post_type, string $title, string $slug, array $meta = [], string $content = '', array $term_slugs = [], string $taxonomy = ''): int
 {
@@ -97,8 +97,8 @@ function south_city_seed_default_content(): void
         $home_meta = [
             'hero_headline_en' => 'Where Your Dreams Find Their Address',
             'hero_headline_bn' => 'যেখানে আপনার স্বপ্নেরা তার ঠিকানা খুঁজে পায়',
-            'hero_subline_en' => 'A ~600-bigha planned township in Sayedpur Union - beside the Eastern Bypass, 5 minutes from the Dhaka-Mawa Expressway.',
-            'hero_subline_bn' => 'সৈয়দপুর ইউনিয়নে প্রায় ৬০০ বিঘার পরিকল্পিত টাউনশিপ - ইস্টার্ন বাইপাস সংলগ্ন, ঢাকা-মাওয়া এক্সপ্রেসওয়ে থেকে ৫ মিনিটের দূরত্বে।',
+            'hero_subline_en' => 'A ~800-bigha planned township in Sayedpur Union - beside the Eastern Bypass, 2 minutes from the Dhaka-Mawa Expressway (High Road).',
+            'hero_subline_bn' => 'সৈয়দপুর ইউনিয়নে প্রায় ৮০০ বিঘার পরিকল্পিত টাউনশিপ - ইস্টার্ন বাইপাস সংলগ্ন, ঢাকা-মাওয়া এক্সপ্রেসওয়ে (হাই রোড) থেকে ২ মিনিটের দূরত্বে।',
             'hero_chips' => [
                 ['text_en' => 'Prime Location', 'text_bn' => 'প্রাইম লোকেশন'],
                 ['text_en' => 'Legal Security', 'text_bn' => 'আইনি নিরাপত্তা'],
@@ -107,19 +107,18 @@ function south_city_seed_default_content(): void
                 ['text_en' => 'Green & Sustainable', 'text_bn' => 'সবুজ ও টেকসই'],
                 ['text_en' => 'Family Friendly', 'text_bn' => 'পরিবার-বান্ধব'],
             ],
-            'overview_paragraph_en' => 'South City is a ~600-bigha planned residential and commercial land development in Sayedpur Union, South Keraniganj — the Dhaleshwari river along its north edge, the Eastern Bypass to the west and the 6-lane Dhaka-Mawa Expressway to the east, 5 minutes from the expressway. Four thoughtfully laid-out sectors, 25 / 30 / 40 / 60 ft roads, and everyday facilities like schools, a central mosque and a health centre are growing into a complete township, while installment plans of up to 5 years keep ownership within reach.',
-            'overview_paragraph_bn' => 'সাউথ সিটি — দক্ষিণ কেরানীগঞ্জের সৈয়দপুর ইউনিয়নে প্রায় ৬০০ বিঘার একটি পরিকল্পিত আবাসিক ও বাণিজ্যিক ল্যান্ড ডেভেলপমেন্ট প্রকল্প। উত্তরে ধলেশ্বরী নদী, পশ্চিমে ইস্টার্ন বাইপাস আর পূর্বে ৬ লেনের ঢাকা-মাওয়া এক্সপ্রেসওয়ে; এক্সপ্রেসওয়ে থেকে দূরত্ব মাত্র ৫ মিনিট। চারটি সুপরিকল্পিত সেক্টর, ২৫ / ৩০ / ৪০ / ৬০ ফুট প্রশস্ত রাস্তা, আর স্কুল, কেন্দ্রীয় মসজিদ ও হেলথ সেন্টারসহ দৈনন্দিন সব সুবিধা নিয়ে গড়ে উঠছে একটি পূর্ণাঙ্গ টাউনশিপ; সঙ্গে রয়েছে ৫ বছর পর্যন্ত সহজ কিস্তির সুবিধা।',
+            'overview_paragraph_en' => 'South City is a ~800-bigha planned residential and commercial land development in Sayedpur Union, South Keraniganj — the Dhaleshwari river along its north edge, the Eastern Bypass to the west and the 6-lane Dhaka-Mawa Expressway to the east, 2 minutes from the expressway. Four thoughtfully laid-out sectors, 25 / 30 / 40 / 60 ft roads, and everyday facilities like schools, a central mosque and a health centre are growing into a complete township, while installment plans of up to 5 years keep ownership within reach.',
+            'overview_paragraph_bn' => 'সাউথ সিটি — দক্ষিণ কেরানীগঞ্জের সৈয়দপুর ইউনিয়নে প্রায় ৮০০ বিঘার একটি পরিকল্পিত আবাসিক ও বাণিজ্যিক ল্যান্ড ডেভেলপমেন্ট প্রকল্প। উত্তরে ধলেশ্বরী নদী, পশ্চিমে ইস্টার্ন বাইপাস আর পূর্বে ৬ লেনের ঢাকা-মাওয়া এক্সপ্রেসওয়ে; এক্সপ্রেসওয়ে থেকে দূরত্ব মাত্র ২ মিনিট। চারটি সুপরিকল্পিত সেক্টর, ২৫ / ৩০ / ৪০ / ৬০ ফুট প্রশস্ত রাস্তা, আর স্কুল, কেন্দ্রীয় মসজিদ ও হেলথ সেন্টারসহ দৈনন্দিন সব সুবিধা নিয়ে গড়ে উঠছে একটি পূর্ণাঙ্গ টাউনশিপ; সঙ্গে রয়েছে ৫ বছর পর্যন্ত সহজ কিস্তির সুবিধা।',
             'overview_counters' => [
-                ['end' => 600, 'display_en' => '600', 'display_bn' => '৬০০', 'label_en' => 'Bigha planned township', 'label_bn' => 'বিঘা পরিকল্পিত প্রকল্প'],
+                ['end' => 800, 'display_en' => '800', 'display_bn' => '৮০০', 'label_en' => 'Bigha planned township', 'label_bn' => 'বিঘা পরিকল্পিত প্রকল্প'],
                 ['end' => 4, 'display_en' => '4', 'display_bn' => '৪', 'label_en' => 'Residential & commercial sectors', 'label_bn' => 'আবাসিক ও বাণিজ্যিক সেক্টর'],
                 ['end' => '', 'display_en' => '3-40', 'display_bn' => '৩-৪০', 'label_en' => 'Katha plot sizes', 'label_bn' => 'কাঠা প্লট সাইজ'],
                 ['end' => 5, 'display_en' => '5', 'display_bn' => '৫', 'label_en' => 'Years of easy installments', 'label_bn' => 'বছর পর্যন্ত সহজ কিস্তি'],
             ],
             'location_distances' => [
-                ['place_en' => 'Dhaka-Mawa Expressway', 'place_bn' => 'ঢাকা-মাওয়া এক্সপ্রেসওয়ে', 'value_en' => '5 min drive', 'value_bn' => '৫ মিনিটের দূরত্বে'],
-                ['place_en' => 'Eastern Bypass', 'place_bn' => 'ইস্টার্ন বাইপাস', 'value_en' => 'Adjacent', 'value_bn' => 'সংলগ্ন'],
-                ['place_en' => 'Padma Bridge', 'place_bn' => 'পদ্মা সেতু', 'value_en' => 'Easy access via expressway', 'value_bn' => 'এক্সপ্রেসওয়ে দিয়ে সহজ যোগাযোগ'],
-                ['place_en' => 'RAJUK Jhilmil project', 'place_bn' => 'রাজউক ঝিলমিল প্রকল্প', 'value_en' => 'Nearby', 'value_bn' => 'নিকটেই'],
+                ['place_en' => 'Motijheel', 'place_bn' => 'মতিঝিল', 'value_en' => '20 min drive', 'value_bn' => '২০ মিনিটের দূরত্বে'],
+                ['place_en' => 'Mohammadpur, Basila', 'place_bn' => 'মোহাম্মদপুর, বসিলা', 'value_en' => '25 min drive', 'value_bn' => '২৫ মিনিটের দূরত্বে'],
+                ['place_en' => 'Hazrat Shahjalal International Airport', 'place_bn' => 'হযরত শাহজালাল আন্তর্জাতিক বিমানবন্দর', 'value_en' => '30-35 min drive', 'value_bn' => '৩০-৩৫ মিনিটের দূরত্বে'],
             ],
             'project_boundaries' => [
                 ['side_en' => 'North', 'side_bn' => 'উত্তরে', 'value_en' => 'Dhaleshwari River', 'value_bn' => 'ধলেশ্বরী নদী'],
@@ -143,9 +142,9 @@ function south_city_seed_default_content(): void
 
             // --- Project Summary grid (brochure p.3) ---
             'project_summary' => [
-                ['icon' => 'landplot', 'value_en' => '~600', 'value_bn' => 'প্রায় ৬০০', 'label_en' => 'Bigha planned project', 'label_bn' => 'বিঘা পরিকল্পিত প্রকল্প'],
+                ['icon' => 'landplot', 'value_en' => '~800', 'value_bn' => 'প্রায় ৮০০', 'label_en' => 'Bigha planned project', 'label_bn' => 'বিঘা পরিকল্পিত প্রকল্প'],
                 ['icon' => 'map', 'value_en' => '4', 'value_bn' => '৪', 'label_en' => 'Planned sectors (01–04)', 'label_bn' => 'পরিকল্পিত সেক্টর (০১–০৪)'],
-                ['icon' => 'building', 'value_en' => '3 · 5 · 10 · 20 · 30 · 40', 'value_bn' => '৩ · ৫ · ১০ · ২০ · ৩০ · ৪০', 'label_en' => 'Katha plot sizes', 'label_bn' => 'কাঠা প্লট সাইজ'],
+                ['icon' => 'building', 'value_en' => '3 · 5 · 10 · 20 · 40', 'value_bn' => '৩ · ৫ · ১০ · ২০ · ৪০', 'label_en' => 'Katha plot sizes', 'label_bn' => 'কাঠা প্লট সাইজ'],
                 ['icon' => 'road', 'value_en' => "25' · 30' · 40' · 60'", 'value_bn' => "২৫' · ৩০' · ৪০' · ৬০'", 'label_en' => 'ft road widths', 'label_bn' => 'ফুট রাস্তার প্রস্থ'],
                 ['icon' => 'landcheck', 'value_en' => 'Own', 'value_bn' => 'নিজস্ব', 'label_en' => 'Purchased land', 'label_bn' => 'ক্রয়কৃত জমি'],
                 ['icon' => 'stamp', 'value_en' => 'Instant', 'value_bn' => 'তাৎক্ষণিক', 'label_en' => 'Registration on full payment', 'label_bn' => 'এককালীন সম্পূর্ণ পেমেন্টে রেজিস্ট্রেশন'],
@@ -156,8 +155,8 @@ function south_city_seed_default_content(): void
             // --- Managing Director's Message (brochure p.4) ---
             'md_name_en' => 'South Dhaka Properties & Housing Ltd.',
             'md_name_bn' => 'সাউথ ঢাকা প্রপার্টিজ অ্যান্ড হাউজিং লিমিটেড',
-            'md_body_en' => "South City is not just a real estate project; it is the dream of building a modern, safe and sustainable society for present and future generations.\n\nSpread over 600 bigha of prime land in Sayedpur Union and beautifully connected to the Dhaka-Mawa Expressway and the Eastern Bypass, South City is planned with wide roads, green spaces, modern amenities and essential services to ensure a premium lifestyle.\n\nWe believe in transparency, commitment and on-time delivery. Our goal is to hand over plots ahead of schedule and to create long-term value for our customers.\n\nWhere your dreams find their address. Welcome to South City.",
-            'md_body_bn' => "সাউথ সিটি শুধু একটি রিয়েল এস্টেট প্রকল্প নয়; এটি বর্তমান ও ভবিষ্যৎ প্রজন্মের জন্য একটি আধুনিক, নিরাপদ এবং টেকসই সমাজ গড়ে তোলার স্বপ্ন।\n\nসৈয়দপুর ইউনিয়নে ৬০০ বিঘা উৎকৃষ্ট জমির উপর বিস্তৃত এবং ঢাকা-মাওয়া এক্সপ্রেসওয়ে ও ইস্টার্ন বাইপাসের সাথে চমৎকার সংযোগযুক্ত সাউথ সিটি একটি প্রিমিয়াম জীবনধারা নিশ্চিত করার লক্ষ্যে প্রশস্ত রাস্তা, সবুজ স্থান, আধুনিক সুযোগ-সুবিধা এবং অত্যাবশ্যকীয় পরিষেবা দিয়ে পরিকল্পিত।\n\nআমরা স্বচ্ছতা, প্রতিশ্রুতি এবং সময়মতো সরবরাহে বিশ্বাসী। আমাদের লক্ষ্য হলো নির্ধারিত সময়ের আগেই প্লট হস্তান্তর করা এবং গ্রাহকের জন্য দীর্ঘমেয়াদী মূল্য তৈরি করা।\n\nযেখানে আপনার স্বপ্নেরা তার ঠিকানা খুঁজে পায়। সাউথ সিটিতে আপনাকে স্বাগতম।",
+            'md_body_en' => "South City is not just a real estate project; it is the dream of building a modern, safe and sustainable society for present and future generations.\n\nSpread over 800 bigha of prime land in Sayedpur Union and beautifully connected to the Dhaka-Mawa Expressway and the Eastern Bypass, South City is planned with wide roads, green spaces, modern amenities and essential services to ensure a premium lifestyle.\n\nWe believe in transparency, commitment and on-time delivery. Our goal is to hand over plots ahead of schedule and to create long-term value for our customers.\n\nWhere your dreams find their address. Welcome to South City.",
+            'md_body_bn' => "সাউথ সিটি শুধু একটি রিয়েল এস্টেট প্রকল্প নয়; এটি বর্তমান ও ভবিষ্যৎ প্রজন্মের জন্য একটি আধুনিক, নিরাপদ এবং টেকসই সমাজ গড়ে তোলার স্বপ্ন।\n\nসৈয়দপুর ইউনিয়নে ৮০০ বিঘা উৎকৃষ্ট জমির উপর বিস্তৃত এবং ঢাকা-মাওয়া এক্সপ্রেসওয়ে ও ইস্টার্ন বাইপাসের সাথে চমৎকার সংযোগযুক্ত সাউথ সিটি একটি প্রিমিয়াম জীবনধারা নিশ্চিত করার লক্ষ্যে প্রশস্ত রাস্তা, সবুজ স্থান, আধুনিক সুযোগ-সুবিধা এবং অত্যাবশ্যকীয় পরিষেবা দিয়ে পরিকল্পিত।\n\nআমরা স্বচ্ছতা, প্রতিশ্রুতি এবং সময়মতো সরবরাহে বিশ্বাসী। আমাদের লক্ষ্য হলো নির্ধারিত সময়ের আগেই প্লট হস্তান্তর করা এবং গ্রাহকের জন্য দীর্ঘমেয়াদী মূল্য তৈরি করা।\n\nযেখানে আপনার স্বপ্নেরা তার ঠিকানা খুঁজে পায়। সাউথ সিটিতে আপনাকে স্বাগতম।",
 
             // --- Company Profile (brochure p.4) ---
             'about_text_en' => 'South Dhaka Properties & Housing Ltd. is a trusted real estate company dedicated to developing well-planned, modern and sustainable residential projects. Our core aims are quality, on-time handover and customer satisfaction.',
@@ -255,10 +254,10 @@ function south_city_seed_default_content(): void
         ['Project', 'fact-project', ['label_en' => 'Project', 'label_bn' => 'প্রকল্প', 'value_en' => 'South City', 'value_bn' => 'সাউথ সিটি', 'order_rank' => 1]],
         ['Developer', 'fact-developer', ['label_en' => 'Developer', 'label_bn' => 'ডেভেলপার', 'value_en' => 'South Dhaka Properties & Housing Ltd.', 'value_bn' => 'সাউথ ঢাকা প্রপার্টিজ অ্যান্ড হাউজিং লিমিটেড', 'order_rank' => 2]],
         ['Location', 'fact-location', ['label_en' => 'Location', 'label_bn' => 'অবস্থান', 'value_en' => 'Sayedpur Union, South Keraniganj, Dhaka', 'value_bn' => 'সৈয়দপুর ইউনিয়ন, দক্ষিণ কেরানীগঞ্জ, ঢাকা', 'order_rank' => 3]],
-        ['Total Area', 'fact-total-area', ['label_en' => 'Total area', 'label_bn' => 'মোট আয়তন', 'value_en' => '~600 Bigha (planned)', 'value_bn' => 'প্রায় ৬০০ বিঘা (পরিকল্পিত)', 'order_rank' => 4]],
+        ['Total Area', 'fact-total-area', ['label_en' => 'Total area', 'label_bn' => 'মোট আয়তন', 'value_en' => '~800 Bigha (planned)', 'value_bn' => 'প্রায় ৮০০ বিঘা (পরিকল্পিত)', 'order_rank' => 4]],
         ['Sectors', 'fact-sectors', ['label_en' => 'Sectors', 'label_bn' => 'সেক্টর', 'value_en' => '4 (Sector 01–04)', 'value_bn' => '৪টি (সেক্টর ০১–০৪)', 'order_rank' => 5]],
         ['Plot Types', 'fact-plot-types', ['label_en' => 'Plot types', 'label_bn' => 'প্লটের ধরন', 'value_en' => 'Residential & Commercial', 'value_bn' => 'আবাসিক ও বাণিজ্যিক', 'order_rank' => 6]],
-        ['Plot Sizes', 'fact-plot-sizes', ['label_en' => 'Plot sizes', 'label_bn' => 'প্লট সাইজ', 'value_en' => '3 · 5 · 10 · 20 · 30 · 40 Katha', 'value_bn' => '৩ · ৫ · ১০ · ২০ · ৩০ · ৪০ কাঠা', 'order_rank' => 7]],
+        ['Plot Sizes', 'fact-plot-sizes', ['label_en' => 'Plot sizes', 'label_bn' => 'প্লট সাইজ', 'value_en' => '3 · 5 · 10 · 20 · 40 Katha', 'value_bn' => '৩ · ৫ · ১০ · ২০ · ৪০ কাঠা', 'order_rank' => 7]],
         ['Road Width', 'fact-road-width', ['label_en' => 'Road width', 'label_bn' => 'রাস্তার প্রশস্ততা', 'value_en' => "25' / 30' / 40' / 60'", 'value_bn' => "২৫' / ৩০' / ৪০' / ৬০'", 'order_rank' => 8]],
     ];
 
@@ -270,12 +269,11 @@ function south_city_seed_default_content(): void
     south_city_prune_seed_posts('southcity_fact', $fact_slugs);
 
     $plots = [
-        ['3 Katha', 'plot-3-katha', ['katha_en' => '3 Katha', 'katha_bn' => '৩ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '2,160 sq ft', 'sqft_bn' => '২,১৬০ বর্গফুট', 'dimensions_en' => 'Approx. 36 ft x 60 ft', 'dimensions_bn' => 'প্রায় ৩৬ ফুট x ৬০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 1]],
-        ['5 Katha', 'plot-5-katha', ['katha_en' => '5 Katha', 'katha_bn' => '৫ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '3,600 sq ft', 'sqft_bn' => '৩,৬০০ বর্গফুট', 'dimensions_en' => 'Approx. 50 ft x 72 ft', 'dimensions_bn' => 'প্রায় ৫০ ফুট x ৭২ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 2]],
-        ['10 Katha', 'plot-10-katha', ['katha_en' => '10 Katha', 'katha_bn' => '১০ কাঠা', 'zone_en' => 'Exclusive Zone', 'zone_bn' => 'এক্সক্লুসিভ জোন', 'sqft_en' => '7,200 sq ft', 'sqft_bn' => '৭,২০০ বর্গফুট', 'dimensions_en' => 'Approx. 72 ft x 100 ft', 'dimensions_bn' => 'প্রায় ৭২ ফুট x ১০০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 3]],
-        ['20 Katha', 'plot-20-katha', ['katha_en' => '20 Katha', 'katha_bn' => '২০ কাঠা', 'zone_en' => 'Duplex Zone', 'zone_bn' => 'ডুপ্লেক্স জোন', 'sqft_en' => '14,400 sq ft', 'sqft_bn' => '১৪,৪০০ বর্গফুট', 'dimensions_en' => 'Approx. 100 ft x 144 ft', 'dimensions_bn' => 'প্রায় ১০০ ফুট x ১৪৪ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 4]],
-        ['30 Katha', 'plot-30-katha', ['katha_en' => '30 Katha', 'katha_bn' => '৩০ কাঠা', 'zone_en' => 'Villa Zone', 'zone_bn' => 'ভিলা জোন', 'sqft_en' => '21,600 sq ft', 'sqft_bn' => '২১,৬০০ বর্গফুট', 'dimensions_en' => 'Approx. 120 ft x 180 ft', 'dimensions_bn' => 'প্রায় ১২0 ফুট x ১৮০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 5]],
-        ['40 Katha', 'plot-40-katha', ['katha_en' => '40 Katha', 'katha_bn' => '৪০ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '28,800 sq ft', 'sqft_bn' => '২৮,৮০০ বর্গফুট', 'dimensions_en' => 'Approx. 144 ft x 200 ft', 'dimensions_bn' => 'প্রায় ১৪৪ ফুট x ২০০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 6]],
+        ['3 Katha', 'plot-3-katha', ['katha_en' => '3 Katha', 'katha_bn' => '৩ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '1,962.5 sq ft', 'sqft_bn' => '১,৯৬২.৫ বর্গফুট', 'dimensions_en' => 'Approx. 39.25 ft x 50 ft', 'dimensions_bn' => 'প্রায় ৩৯.২৫ ফুট x ৫০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 1]],
+        ['5 Katha', 'plot-5-katha', ['katha_en' => '5 Katha', 'katha_bn' => '৫ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '3,270 sq ft', 'sqft_bn' => '৩,২৭০ বর্গফুট', 'dimensions_en' => 'Approx. 51 ft x 64 ft', 'dimensions_bn' => 'প্রায় ৫১ ফুট x ৬৪ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 2]],
+        ['10 Katha', 'plot-10-katha', ['katha_en' => '10 Katha', 'katha_bn' => '১০ কাঠা', 'zone_en' => 'Exclusive Zone', 'zone_bn' => 'এক্সক্লুসিভ জোন', 'sqft_en' => '6,540 sq ft', 'sqft_bn' => '৬,৫৪০ বর্গফুট', 'dimensions_en' => 'Approx. 72 ft x 91 ft', 'dimensions_bn' => 'প্রায় ৭২ ফুট x ৯১ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 3]],
+        ['20 Katha', 'plot-20-katha', ['katha_en' => '20 Katha', 'katha_bn' => '২০ কাঠা', 'zone_en' => 'Duplex Zone', 'zone_bn' => 'ডুপ্লেক্স জোন', 'sqft_en' => '13,080 sq ft', 'sqft_bn' => '১৩,০৮০ বর্গফুট', 'dimensions_en' => 'Approx. 101 ft x 129 ft', 'dimensions_bn' => 'প্রায় ১০১ ফুট x ১২৯ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 4]],
+        ['40 Katha', 'plot-40-katha', ['katha_en' => '40 Katha', 'katha_bn' => '৪০ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '26,160 sq ft', 'sqft_bn' => '২৬,১৬০ বর্গফুট', 'dimensions_en' => 'Approx. 143 ft x 183 ft', 'dimensions_bn' => 'প্রায় ১৪৩ ফুট x ১৮৩ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 5]],
     ];
 
     $plot_slugs = [];
@@ -301,7 +299,7 @@ function south_city_seed_default_content(): void
         // --- Modern Infrastructure ---
         ['25 ft internal roads', 'infra-25ft-roads', 'infrastructure', ['icon' => 'road', 'label_en' => "25' internal roads", 'label_bn' => '২৫ ফুট অভ্যন্তরীণ রাস্তা', 'order_rank' => 10]],
         ['30 ft side roads', 'infra-30ft-roads', 'infrastructure', ['icon' => 'road', 'label_en' => "30' side roads", 'label_bn' => '৩০ ফুট পার্শ্ববর্তী রাস্তা', 'order_rank' => 11]],
-        ['40 ft collector road', 'infra-40ft-road', 'infrastructure', ['icon' => 'road', 'label_en' => "40' collector road", 'label_bn' => '৪০ ফুট কালেক্টর রোড', 'order_rank' => 12]],
+        ['40 ft connecting road', 'infra-40ft-road', 'infrastructure', ['icon' => 'road', 'label_en' => "40' connecting road", 'label_bn' => '৪০ ফুট কানেক্টিং রোড', 'order_rank' => 12]],
         ['60 ft main boulevard', 'infra-60ft-boulevard', 'infrastructure', ['icon' => 'road', 'label_en' => "60' main boulevard", 'label_bn' => '৬০ ফুট প্রধান বুলেভার্ড', 'order_rank' => 13]],
         ['Underground utility planning', 'infra-underground-utility', 'infrastructure', ['icon' => 'utility', 'label_en' => 'Underground utility planning', 'label_bn' => 'ভূগর্ভস্থ ইউটিলিটি পরিকল্পনা', 'order_rank' => 14]],
         ['Modern drainage system', 'infra-drainage', 'infrastructure', ['icon' => 'water', 'label_en' => 'Modern drainage system', 'label_bn' => 'আধুনিক নিষ্কাশন ব্যবস্থা', 'order_rank' => 15]],
@@ -327,7 +325,7 @@ function south_city_seed_default_content(): void
     $landmarks = [
         ['Connectivity', 'landmark-connectivity', ['label_en' => 'Connectivity', 'label_bn' => 'যোগাযোগ', 'image_key' => 'connectivity', 'items' => [
             ['name_en' => 'Eastern Bypass Road', 'name_bn' => 'ইস্টার্ন বাইপাস রোড', 'note_en' => 'Adjacent west boundary', 'note_bn' => 'সংলগ্ন পশ্চিম সীমানা'],
-            ['name_en' => 'Dhaka-Mawa Expressway', 'name_bn' => 'ঢাকা-মাওয়া এক্সপ্রেসওয়ে', 'note_en' => '5 minutes by road', 'note_bn' => 'সড়কপথে ৫ মিনিট'],
+            ['name_en' => 'Dhaka-Mawa Expressway', 'name_bn' => 'ঢাকা-মাওয়া এক্সপ্রেসওয়ে', 'note_en' => '2 minutes by road', 'note_bn' => 'সড়কপথে ২ মিনিট'],
             ['name_en' => 'Padma Bridge', 'name_bn' => 'পদ্মা সেতু', 'note_en' => 'Easy access via expressway', 'note_bn' => 'এক্সপ্রেসওয়ে দিয়ে সহজ যোগাযোগ'],
         ], 'order_rank' => 1]],
         ['Education', 'landmark-education', ['label_en' => 'Education', 'label_bn' => 'শিক্ষা', 'image_key' => 'education', 'items' => [
