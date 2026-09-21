@@ -16,7 +16,7 @@ if (! defined('ABSPATH')) {
  * Bump this whenever the seed content below changes so an already-active
  * site re-applies it on the next request (see the init hook in functions.php).
  */
-const SOUTH_CITY_SEED_VERSION = 5;
+const SOUTH_CITY_SEED_VERSION = 6;
 
 function south_city_upsert_seed_post(string $post_type, string $title, string $slug, array $meta = [], string $content = '', array $term_slugs = [], string $taxonomy = ''): int
 {
@@ -193,7 +193,7 @@ function south_city_seed_default_content(): void
                 ['icon' => 'doc', 'title_en' => 'Legal Security', 'title_bn' => 'আইনি নিরাপত্তা', 'body_en' => 'Instant registration on one-time full payment, making the investment even safer.', 'body_bn' => 'এককালীন মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন, যা বিনিয়োগকে আরও নিরাপদ করে।'],
                 ['icon' => 'wallet', 'title_en' => 'Flexible Payment', 'title_bn' => 'নমনীয় পেমেন্ট', 'body_en' => 'Easy installments of up to 5 years for planned investment.', 'body_bn' => 'সর্বোচ্চ ৫ বছরের সহজ কিস্তি সুবিধা, যাতে পরিকল্পিতভাবে বিনিয়োগ করা যায়।'],
                 ['icon' => 'crane', 'title_en' => 'Development Progress', 'title_bn' => 'উন্নয়ন অগ্রগতি', 'body_en' => 'Development work on the project is progressing at an increasing pace.', 'body_bn' => 'প্রকল্পের উন্নয়ন কাজ ক্রমবর্ধমান হারে চলমান।'],
-                ['icon' => 'home', 'title_en' => 'Ready Development Vision', 'title_bn' => 'প্রস্তুত উন্নয়ন ভিশন', 'body_en' => 'A goal to hand over developed 3, 5, 10, 20, 30 & 40 katha plots with modern infrastructure as planned.', 'body_bn' => 'উন্নত অবকাঠামো ও পরিকল্পনা অনুযায়ী ৩, ৫, ১০, ২০, ৩০ ও ৪০ কাঠার উন্নত প্লট হস্তান্তরের লক্ষ্য।'],
+                ['icon' => 'home', 'title_en' => 'Ready Development Vision', 'title_bn' => 'প্রস্তুত উন্নয়ন ভিশন', 'body_en' => 'A goal to hand over developed 3, 5, 10, 20 & 40 katha plots with modern infrastructure as planned.', 'body_bn' => 'উন্নত অবকাঠামো ও পরিকল্পনা অনুযায়ী ৩, ৫, ১০, ২০ ও ৪০ কাঠার উন্নত প্লট হস্তান্তরের লক্ষ্য।'],
             ],
 
             // --- Ownership Process (brochure p.7) ---
@@ -269,17 +269,23 @@ function south_city_seed_default_content(): void
     south_city_prune_seed_posts('southcity_fact', $fact_slugs);
 
     $plots = [
-        ['3 Katha', 'plot-3-katha', ['katha_en' => '3 Katha', 'katha_bn' => '৩ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '1,962.5 sq ft', 'sqft_bn' => '১,৯৬২.৫ বর্গফুট', 'dimensions_en' => 'Approx. 39.25 ft x 50 ft', 'dimensions_bn' => 'প্রায় ৩৯.২৫ ফুট x ৫০ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 1]],
-        ['5 Katha', 'plot-5-katha', ['katha_en' => '5 Katha', 'katha_bn' => '৫ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '3,270 sq ft', 'sqft_bn' => '৩,২৭০ বর্গফুট', 'dimensions_en' => 'Approx. 51 ft x 64 ft', 'dimensions_bn' => 'প্রায় ৫১ ফুট x ৬৪ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 2]],
-        ['10 Katha', 'plot-10-katha', ['katha_en' => '10 Katha', 'katha_bn' => '১০ কাঠা', 'zone_en' => 'Exclusive Zone', 'zone_bn' => 'এক্সক্লুসিভ জোন', 'sqft_en' => '6,540 sq ft', 'sqft_bn' => '৬,৫৪০ বর্গফুট', 'dimensions_en' => 'Approx. 72 ft x 91 ft', 'dimensions_bn' => 'প্রায় ৭২ ফুট x ৯১ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 3]],
-        ['20 Katha', 'plot-20-katha', ['katha_en' => '20 Katha', 'katha_bn' => '২০ কাঠা', 'zone_en' => 'Duplex Zone', 'zone_bn' => 'ডুপ্লেক্স জোন', 'sqft_en' => '13,080 sq ft', 'sqft_bn' => '১৩,০৮০ বর্গফুট', 'dimensions_en' => 'Approx. 101 ft x 129 ft', 'dimensions_bn' => 'প্রায় ১০১ ফুট x ১২৯ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 4]],
-        ['40 Katha', 'plot-40-katha', ['katha_en' => '40 Katha', 'katha_bn' => '৪০ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'sqft_en' => '26,160 sq ft', 'sqft_bn' => '২৬,১৬০ বর্গফুট', 'dimensions_en' => 'Approx. 143 ft x 183 ft', 'dimensions_bn' => 'প্রায় ১৪৩ ফুট x ১৮৩ ফুট', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 5]],
+        ['3 Katha', 'plot-3-katha', ['katha_en' => '3 Katha', 'katha_bn' => '৩ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 1]],
+        ['5 Katha', 'plot-5-katha', ['katha_en' => '5 Katha', 'katha_bn' => '৫ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 2]],
+        ['10 Katha', 'plot-10-katha', ['katha_en' => '10 Katha', 'katha_bn' => '১০ কাঠা', 'zone_en' => 'Exclusive Zone', 'zone_bn' => 'এক্সক্লুসিভ জোন', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 3]],
+        ['20 Katha', 'plot-20-katha', ['katha_en' => '20 Katha', 'katha_bn' => '২০ কাঠা', 'zone_en' => 'Duplex Zone', 'zone_bn' => 'ডুপ্লেক্স জোন', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 4]],
+        ['40 Katha', 'plot-40-katha', ['katha_en' => '40 Katha', 'katha_bn' => '৪০ কাঠা', 'zone_en' => '', 'zone_bn' => '', 'price_en' => '', 'price_bn' => '', 'booking_en' => 'Call for details', 'booking_bn' => 'বিস্তারিত জানতে কল করুন', 'installment_en' => 'Easy installments up to 5 years - or register instantly on full payment.', 'installment_bn' => '৫ বছর পর্যন্ত সহজ কিস্তি - অথবা সম্পূর্ণ মূল্য পরিশোধে তাৎক্ষণিক রেজিস্ট্রেশন।', 'order_rank' => 5]],
     ];
 
     $plot_slugs = [];
     foreach ($plots as $plot) {
         south_city_upsert_seed_post('southcity_plot', $plot[0], $plot[1], $plot[2]);
         $plot_slugs[] = $plot[1];
+        $plot_post = get_page_by_path($plot[1], OBJECT, 'southcity_plot');
+        if ($plot_post instanceof WP_Post) {
+            foreach (['sqft_en', 'sqft_bn', 'dimensions_en', 'dimensions_bn'] as $retired_key) {
+                delete_post_meta($plot_post->ID, $retired_key);
+            }
+        }
     }
     south_city_prune_seed_posts('southcity_plot', $plot_slugs);
 

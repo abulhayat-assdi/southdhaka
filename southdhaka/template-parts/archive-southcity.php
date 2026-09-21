@@ -68,7 +68,7 @@ get_header();
                                 <dl class="mt-4 space-y-2 text-sm">
                                     <div class="flex justify-between gap-4">
                                         <dt class="font-semibold text-muted"><?php esc_html_e('Area', 'south-city'); ?></dt>
-                                        <dd class="text-right font-medium text-navy"><?php echo esc_html(south_city_get_locale_field('sqft', get_the_ID(), $language)); ?></dd>
+                                        <dd class="text-right font-medium text-navy"><?php echo esc_html(south_city_get_locale_field('katha', get_the_ID(), $language)); ?></dd>
                                     </div>
                                     <div class="flex justify-between gap-4">
                                         <dt class="font-semibold text-muted"><?php esc_html_e('Price', 'south-city'); ?></dt>

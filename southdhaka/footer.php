@@ -78,134 +78,124 @@ $bottom_nav_items     = [
 <footer class="bg-navy-deep text-white">
     <div class="container-c grid gap-10 py-14 md:grid-cols-3 md:gap-8">
         <div>
-            <?php if (is_active_sidebar('footer-1')) : ?>
-                <?php dynamic_sidebar('footer-1'); ?>
-            <?php else : ?>
-                <div class="flex items-center gap-3">
-                    <?php if (has_custom_logo()) : ?>
-                        <span class="site-logo-footer h-14 w-14 shrink-0 rounded-full bg-white p-1 ring-1 ring-gold/40">
-                            <?php the_custom_logo(); ?>
-                        </span>
-                    <?php else : ?>
-                        <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1 font-bold text-navy ring-1 ring-gold/40" aria-hidden="true">SC</span>
-                    <?php endif; ?>
-                    <div class="font-display leading-tight">
-                        <p class="text-xl font-extrabold tracking-wide text-white"><?php echo esc_html(get_bloginfo('name') ?: 'SOUTH CITY'); ?></p>
-                        <p class="text-xs font-medium text-gold-light"><?php echo esc_html($company_name); ?></p>
-                    </div>
+            <div class="flex items-center gap-3">
+                <?php if (has_custom_logo()) : ?>
+                    <span class="site-logo-footer h-14 w-14 shrink-0 rounded-full bg-white p-1 ring-1 ring-gold/40">
+                        <?php the_custom_logo(); ?>
+                    </span>
+                <?php elseif (has_site_icon()) : ?>
+                    <img src="<?php echo esc_url(get_site_icon_url(112)); ?>" alt="" class="h-14 w-14 shrink-0 rounded-full bg-white object-contain p-1 ring-1 ring-gold/40" width="56" height="56">
+                <?php else : ?>
+                    <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1 font-bold text-navy ring-1 ring-gold/40" aria-hidden="true">SC</span>
+                <?php endif; ?>
+                <div class="font-display leading-tight">
+                    <p class="text-xl font-extrabold tracking-wide text-white"><?php echo esc_html(get_bloginfo('name') ?: 'SOUTH CITY'); ?></p>
+                    <p class="text-xs font-medium text-gold-light"><?php echo esc_html($company_name); ?></p>
                 </div>
-                <p class="mt-4 font-display text-sm font-semibold italic text-gold-light">
-                    <?php echo esc_html('"' . south_city_translate('footer_tagline', $language) . '"'); ?>
-                </p>
-            <?php endif; ?>
+            </div>
+            <p class="mt-4 font-display text-sm font-semibold italic text-gold-light">
+                <?php echo esc_html('"' . south_city_translate('footer_tagline', $language) . '"'); ?>
+            </p>
         </div>
 
         <div>
-            <?php if (is_active_sidebar('footer-2')) : ?>
-                <?php dynamic_sidebar('footer-2'); ?>
-            <?php else : ?>
-                <h2 class="font-display text-lg font-bold !text-white"><?php echo esc_html(south_city_translate('contact', $language)); ?></h2>
-                <ul class="mt-4 space-y-3 text-white/85" role="list">
-                    <li class="flex items-start gap-3">
-                        <span class="mt-1 h-5 w-5 shrink-0 text-gold" aria-hidden="true">⌖</span>
-                        <span>
-                            <span class="block text-xs font-semibold uppercase tracking-wide text-gold-light">
-                                <?php echo esc_html(south_city_translate('corporate_office', $language)); ?>
-                            </span>
-                            <?php echo esc_html($address); ?>
+            <h2 class="font-display text-lg font-bold !text-white"><?php echo esc_html(south_city_translate('contact', $language)); ?></h2>
+            <ul class="mt-4 space-y-3 text-white/85" role="list">
+                <li class="flex items-start gap-3">
+                    <span class="mt-1 h-5 w-5 shrink-0 text-gold" aria-hidden="true">⌖</span>
+                    <span>
+                        <span class="block text-xs font-semibold uppercase tracking-wide text-gold-light">
+                            <?php echo esc_html(south_city_translate('corporate_office', $language)); ?>
                         </span>
-                    </li>
+                        <?php echo esc_html($address); ?>
+                    </span>
+                </li>
+                <li>
+                    <a
+                        href="tel:<?php echo esc_attr($phone); ?>"
+                        class="flex min-h-[44px] items-center gap-3 hover:text-gold-light"
+                        data-track="call_click"
+                    >
+                        <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">☎</span>
+                        <?php echo esc_html($phone_display); ?>
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="mailto:<?php echo esc_attr($email); ?>"
+                        class="flex min-h-[44px] items-center gap-3 break-all hover:text-gold-light"
+                    >
+                        <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">✉</span>
+                        <?php echo esc_html($email); ?>
+                    </a>
+                </li>
+                <?php if ($website_url !== '') : ?>
                     <li>
                         <a
-                            href="tel:<?php echo esc_attr($phone); ?>"
-                            class="flex min-h-[44px] items-center gap-3 hover:text-gold-light"
-                            data-track="call_click"
-                        >
-                            <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">☎</span>
-                            <?php echo esc_html($phone_display); ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="mailto:<?php echo esc_attr($email); ?>"
+                            href="<?php echo esc_url($website_url); ?>"
                             class="flex min-h-[44px] items-center gap-3 break-all hover:text-gold-light"
                         >
-                            <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">✉</span>
-                            <?php echo esc_html($email); ?>
+                            <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">🌐</span>
+                            <?php echo esc_html(preg_replace('#^https?://#', '', untrailingslashit($website_url))); ?>
                         </a>
                     </li>
-                    <?php if ($website_url !== '') : ?>
-                        <li>
-                            <a
-                                href="<?php echo esc_url($website_url); ?>"
-                                class="flex min-h-[44px] items-center gap-3 break-all hover:text-gold-light"
-                            >
-                                <span class="h-5 w-5 shrink-0 text-gold" aria-hidden="true">🌐</span>
-                                <?php echo esc_html(preg_replace('#^https?://#', '', untrailingslashit($website_url))); ?>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            <?php endif; ?>
+                <?php endif; ?>
+            </ul>
         </div>
 
         <div>
-            <?php if (is_active_sidebar('footer-3')) : ?>
-                <?php dynamic_sidebar('footer-3'); ?>
+            <h2 class="font-display text-lg font-bold !text-white"><?php echo esc_html(south_city_translate('quick_links', $language)); ?></h2>
+            <?php if (has_nav_menu('footer')) : ?>
+                <?php
+                wp_nav_menu([
+                    'theme_location' => 'footer',
+                    'container'      => false,
+                    'menu_class'     => 'mt-4 grid grid-cols-2 gap-x-4',
+                    'depth'          => 1,
+                    'fallback_cb'    => false,
+                ]);
+                ?>
             <?php else : ?>
-                <h2 class="font-display text-lg font-bold !text-white"><?php echo esc_html(south_city_translate('quick_links', $language)); ?></h2>
-                <?php if (has_nav_menu('footer')) : ?>
-                    <?php
-                    wp_nav_menu([
-                        'theme_location' => 'footer',
-                        'container'      => false,
-                        'menu_class'     => 'mt-4 grid grid-cols-2 gap-x-4',
-                        'depth'          => 1,
-                        'fallback_cb'    => false,
-                    ]);
-                    ?>
-                <?php else : ?>
-                    <ul class="mt-4 grid grid-cols-2 gap-x-4" role="list">
-                        <?php foreach ($default_nav as $nav_item) : ?>
-                            <li>
-                                <a
-                                    href="<?php echo esc_url($nav_item['href']); ?>"
-                                    class="flex min-h-[40px] items-center text-white/85 transition-colors hover:text-gold-light"
-                                >
-                                    <?php echo esc_html($nav_item['label']); ?>
-                                </a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
-
-                <div class="mt-5 flex gap-3">
-                    <?php foreach ($social_links as $social_link) : ?>
-                        <?php if ($social_link['url'] === '') : ?>
-                            <?php continue; ?>
-                        <?php endif; ?>
-                        <a
-                            href="<?php echo esc_url($social_link['url']); ?>"
-                            target="_blank"
-                            rel="noopener"
-                            aria-label="<?php echo esc_attr($social_link['label']); ?>"
-                            class="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-gold hover:text-gold-light"
-                        >
-                            <?php echo esc_html($social_link['icon']); ?>
-                        </a>
+                <ul class="mt-4 grid grid-cols-2 gap-x-4" role="list">
+                    <?php foreach ($default_nav as $nav_item) : ?>
+                        <li>
+                            <a
+                                href="<?php echo esc_url($nav_item['href']); ?>"
+                                class="flex min-h-[40px] items-center text-white/85 transition-colors hover:text-gold-light"
+                            >
+                                <?php echo esc_html($nav_item['label']); ?>
+                            </a>
+                        </li>
                     <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
+            <div class="mt-5 flex gap-3">
+                <?php foreach ($social_links as $social_link) : ?>
+                    <?php if ($social_link['url'] === '') : ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
                     <a
-                        href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>"
+                        href="<?php echo esc_url($social_link['url']); ?>"
                         target="_blank"
                         rel="noopener"
-                        aria-label="WhatsApp"
-                        class="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-whatsapp hover:text-whatsapp"
-                        data-track="whatsapp_click"
+                        aria-label="<?php echo esc_attr($social_link['label']); ?>"
+                        class="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-gold hover:text-gold-light"
                     >
-                        <?php echo south_city_whatsapp_icon('h-5 w-5'); ?>
+                        <?php echo esc_html($social_link['icon']); ?>
                     </a>
-                </div>
-            <?php endif; ?>
+                <?php endforeach; ?>
+                <a
+                    href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="WhatsApp"
+                    class="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-whatsapp hover:text-whatsapp"
+                    data-track="whatsapp_click"
+                >
+                    <?php echo south_city_whatsapp_icon('h-5 w-5'); ?>
+                </a>
+            </div>
         </div>
     </div>
 

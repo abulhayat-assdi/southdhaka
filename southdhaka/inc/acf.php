@@ -930,30 +930,6 @@ function south_city_register_acf_field_groups(): void
                 'type' => 'text',
             ],
             [
-                'key' => 'field_south_city_plot_sqft_en',
-                'label' => __('Area in Sq Ft - English', 'south-city'),
-                'name' => 'sqft_en',
-                'type' => 'text',
-            ],
-            [
-                'key' => 'field_south_city_plot_sqft_bn',
-                'label' => __('Area in Sq Ft - Bangla', 'south-city'),
-                'name' => 'sqft_bn',
-                'type' => 'text',
-            ],
-            [
-                'key' => 'field_south_city_plot_dimensions_en',
-                'label' => __('Approximate Dimensions - English', 'south-city'),
-                'name' => 'dimensions_en',
-                'type' => 'text',
-            ],
-            [
-                'key' => 'field_south_city_plot_dimensions_bn',
-                'label' => __('Approximate Dimensions - Bangla', 'south-city'),
-                'name' => 'dimensions_bn',
-                'type' => 'text',
-            ],
-            [
                 'key' => 'field_south_city_plot_price_en',
                 'label' => __('Price - English', 'south-city'),
                 'name' => 'price_en',

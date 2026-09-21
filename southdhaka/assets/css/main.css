@@ -978,6 +978,18 @@ a,
   top: 0.75rem;
 }
 
+.left-3 {
+  left: 0.75rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.object-contain {
+  object-fit: contain;
+}
+
 .top-full {
   top: 100%;
 }

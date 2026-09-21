@@ -30,9 +30,12 @@ if ($primary_location) {
     $map_zoom = (int) (get_field('zoom', $primary_location->ID) ?: 15);
     $map_src  = 'https://www.google.com/maps?q=' . rawurlencode($map_lat . ',' . $map_lng) . '&z=' . $map_zoom . '&output=embed';
 } else {
-    $map_query = (string) south_city_get_option('map_query', 'South City Sayedpur Keraniganj Dhaka');
-    $map_src   = 'https://www.google.com/maps?q=' . rawurlencode($map_query) . '&z=13&output=embed';
+    $map_lat = SOUTH_CITY_MAP_LAT;
+    $map_lng = SOUTH_CITY_MAP_LNG;
+    $map_src = 'https://www.google.com/maps?q=' . rawurlencode($map_lat . ',' . $map_lng) . '&z=15&output=embed';
 }
+// Tapping anywhere on the map opens Google Maps with directions to the project.
+$map_directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode($map_lat . ',' . $map_lng);
 $brochure          = south_city_get_option('brochure_pdf', '');
 $brochure_url      = south_city_asset_url($brochure, 'full');
 
@@ -315,11 +318,6 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                         $plot_id     = 'plot-' . get_the_ID();
                         $katha       = south_city_get_locale_field('katha', get_the_ID(), $language);
                         $zone        = south_city_get_locale_field('zone', get_the_ID(), $language);
-                        $sqft        = south_city_get_locale_field('sqft', get_the_ID(), $language);
-                        $dimensions  = south_city_get_locale_field('dimensions', get_the_ID(), $language);
-                        $price       = south_city_get_locale_field('price', get_the_ID(), $language);
-                        $booking     = south_city_get_locale_field('booking', get_the_ID(), $language);
-                        $installment = south_city_get_locale_field('installment', get_the_ID(), $language);
                         ?>
                         <button
                             type="button"
@@ -339,35 +337,17 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                             class="rounded-b-xl rounded-tr-xl border border-line bg-white p-5 sm:p-8 <?php echo esc_attr($plot_index > 0 ? 'hidden' : ''); ?>"
                             data-panel="<?php echo esc_attr($plot_id); ?>"
                         >
-                            <div class="grid gap-6 md:grid-cols-[1fr_auto]">
-                                <div class="grid gap-4 sm:grid-cols-2">
-                                    <div class="rounded-lg bg-bg-soft p-4">
-                                        <p class="text-xs font-semibold uppercase tracking-wide text-muted"><?php echo esc_html(south_city_translate('area', $language)); ?></p>
-                                        <p class="mt-1 font-display text-xl font-bold text-navy"><?php echo esc_html($katha); ?> <span class="text-base font-medium text-muted">· <?php echo esc_html($sqft); ?></span></p>
-                                        <?php if ($zone !== '') : ?>
-                                            <span class="mt-2 inline-block rounded-full border border-gold/50 bg-gold/10 px-2.5 py-0.5 text-xs font-semibold text-navy"><?php echo esc_html($zone); ?></span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="rounded-lg bg-bg-soft p-4">
-                                        <p class="text-xs font-semibold uppercase tracking-wide text-muted"><?php echo esc_html(south_city_translate('dimensions', $language)); ?></p>
-                                        <p class="mt-1 font-display text-xl font-bold text-navy"><?php echo esc_html($dimensions); ?></p>
-                                    </div>
-                                    <div class="rounded-lg bg-bg-soft p-4 sm:col-span-2 flex flex-col items-center justify-center text-center">
-                                        <p class="text-xs font-semibold uppercase tracking-wide text-muted mb-2"><?php echo esc_html(south_city_translate('price', $language)); ?> & <?php echo esc_html(south_city_translate('booking_money', $language)); ?></p>
-                                        <a href="tel:<?php echo esc_attr(preg_replace('/[^0-9+]/', '', south_city_get_option('phone', '+8801886175263'))); ?>" class="btn-gold w-full max-w-xs" data-track="call_click">
-                                            <span aria-hidden="true" class="mr-2">☎</span> Call for Details
-                                        </a>
-                                    </div>
+                            <div class="grid items-center gap-6 md:grid-cols-[1fr_auto]">
+                                <div class="rounded-lg bg-bg-soft p-4">
+                                    <p class="text-xs font-semibold uppercase tracking-wide text-muted"><?php echo esc_html(south_city_translate('area', $language)); ?></p>
+                                    <p class="mt-1 font-display text-xl font-bold text-navy"><?php echo esc_html($katha); ?></p>
+                                    <?php if ($zone !== '') : ?>
+                                        <span class="mt-2 inline-block rounded-full border border-gold/50 bg-gold/10 px-2.5 py-0.5 text-xs font-semibold text-navy"><?php echo esc_html($zone); ?></span>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="flex flex-col justify-between gap-4 md:max-w-xs">
-                                    <p class="rounded-lg border border-gold/40 bg-gold/10 p-4 text-sm text-ink">
-                                        <span class="mb-1 block font-semibold text-navy"><?php echo esc_html(south_city_translate('installments', $language)); ?></span>
-                                        <?php echo esc_html($installment); ?>
-                                    </p>
-                                    <a href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>" target="_blank" rel="noopener" class="btn-gold w-full" data-track="whatsapp_click">
-                                        <?php echo esc_html(south_city_translate('reserve_plot', $language)); ?>
-                                    </a>
-                                </div>
+                                <a href="<?php echo esc_url(south_city_whatsapp_url($language)); ?>" target="_blank" rel="noopener" class="btn-gold w-full md:max-w-xs" data-track="whatsapp_click">
+                                    <?php echo esc_html(south_city_translate('reserve_plot', $language)); ?>
+                                </a>
                             </div>
                         </div>
                         <?php $plot_index++; ?>
@@ -442,6 +422,9 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                 <div id="map-shell" class="reveal relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-xl border border-line bg-bg-soft lg:min-h-[420px]" data-map-src="<?php echo esc_url($map_src); ?>">
                     <button type="button" id="map-load" class="btn-outline"><?php echo esc_html(south_city_translate('show_map', $language)); ?></button>
                     <p class="absolute bottom-4 px-4 text-center text-xs text-muted">Sayedpur, South Keraniganj, Dhaka</p>
+                    <a href="<?php echo esc_url($map_directions_url); ?>" target="_blank" rel="noopener" class="absolute inset-0 z-10 block cursor-pointer" aria-label="<?php echo esc_attr(south_city_translate('get_directions', $language)); ?> - South City" data-track="map_directions_click">
+                        <span class="absolute left-3 top-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-navy shadow-card"><?php echo esc_html(south_city_translate('get_directions', $language)); ?> ↗</span>
+                    </a>
                 </div>
                 <div>
                     <?php if (! empty($distances)) : ?>

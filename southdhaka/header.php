@@ -46,6 +46,8 @@ $contact_url    = is_front_page() ? '#contact' : trailingslashit($language === '
                 <span class="site-logo h-9 w-9 md:h-10 md:w-10">
                     <?php the_custom_logo(); ?>
                 </span>
+            <?php elseif (has_site_icon()) : ?>
+                <img src="<?php echo esc_url(get_site_icon_url(96)); ?>" alt="" class="h-9 w-9 shrink-0 object-contain md:h-10 md:w-10" width="40" height="40">
             <?php else : ?>
                 <span class="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-sm font-bold text-white md:h-10 md:w-10" aria-hidden="true">SC</span>
             <?php endif; ?>

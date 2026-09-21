@@ -45,8 +45,6 @@ get_header();
                         $plot_fields = [
                             'katha'       => __('Size', 'south-city'),
                             'zone'        => __('Zone', 'south-city'),
-                            'sqft'        => __('Area in Sq Ft', 'south-city'),
-                            'dimensions'  => __('Approx. Dimensions', 'south-city'),
                             'price'       => __('Price', 'south-city'),
                             'booking'     => __('Booking Money', 'south-city'),
                             'installment' => __('Installment Note', 'south-city'),

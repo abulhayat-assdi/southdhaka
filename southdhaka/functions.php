@@ -13,6 +13,10 @@ define('SOUTH_CITY_THEME_VERSION', '1.0.0');
 define('SOUTH_CITY_THEME_DIR', get_template_directory());
 define('SOUTH_CITY_THEME_URI', get_template_directory_uri());
 
+// South City project location (Google Maps plus code J8WC+GXG, Sayedpur, South Keraniganj).
+define('SOUTH_CITY_MAP_LAT', '23.6463');
+define('SOUTH_CITY_MAP_LNG', '90.3224');
+
 /**
  * Register theme supports, menus, and editor defaults.
  */
@@ -49,43 +53,6 @@ function south_city_setup(): void
     ]);
 }
 add_action('after_setup_theme', 'south_city_setup');
-
-/**
- * Register widget areas used by global templates.
- */
-function south_city_widgets_init(): void
-{
-    register_sidebar([
-        'name'          => __('Footer Column 1', 'south-city'),
-        'id'            => 'footer-1',
-        'description'   => __('First footer widget column.', 'south-city'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
-    ]);
-
-    register_sidebar([
-        'name'          => __('Footer Column 2', 'south-city'),
-        'id'            => 'footer-2',
-        'description'   => __('Second footer widget column.', 'south-city'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
-    ]);
-
-    register_sidebar([
-        'name'          => __('Footer Column 3', 'south-city'),
-        'id'            => 'footer-3',
-        'description'   => __('Third footer widget column.', 'south-city'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</section>',
-        'before_title'  => '<h2 class="widget-title">',
-        'after_title'   => '</h2>',
-    ]);
-}
-add_action('widgets_init', 'south_city_widgets_init');
 
 /**
  * Register language rewrite support for /bn/ (used when pretty permalinks
@@ -534,8 +501,8 @@ function south_city_translate(string $key, ?string $language = null): string
             'bn' => 'আপনার প্লট সাইজ বেছে নিন',
         ],
         'plots_note' => [
-            'en' => '1 Katha = 720 sq ft ≈ 66.9 m² · 1 Bigha = 20 Katha',
-            'bn' => '১ কাঠা = ৭২০ বর্গফুট ≈ ৬৬.৯ বর্গমিটার · ১ বিঘা = ২০ কাঠা',
+            'en' => '1 Bigha = 20 Katha',
+            'bn' => '১ বিঘা = ২০ কাঠা',
         ],
         'location_eyebrow' => [
             'en' => 'Location & connectivity',
@@ -589,10 +556,6 @@ function south_city_translate(string $key, ?string $language = null): string
             'en' => 'Area',
             'bn' => 'আয়তন',
         ],
-        'dimensions' => [
-            'en' => 'Approx. dimensions',
-            'bn' => 'আনুমানিক মাপ',
-        ],
         'price' => [
             'en' => 'Price',
             'bn' => 'মূল্য',
@@ -616,6 +579,10 @@ function south_city_translate(string $key, ?string $language = null): string
         'show_map' => [
             'en' => 'Show map',
             'bn' => 'ম্যাপ দেখুন',
+        ],
+        'get_directions' => [
+            'en' => 'Get directions',
+            'bn' => 'ডিরেকশন দেখুন',
         ],
         'distances_title' => [
             'en' => 'Distances that matter',
@@ -916,6 +883,12 @@ function south_city_asset_url(mixed $asset, string $size = 'large'): string
         $url = wp_get_attachment_image_url((int) $asset, $size);
 
         return $url ? (string) $url : '';
+    }
+
+    if (is_string($asset) && preg_match('#/assets/img/([A-Za-z0-9._/-]+\.(?:webp|png|jpe?g|svg))$#', $asset, $match) && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img/' . $match[1])) {
+        // Seeded content stores an absolute theme URL; re-base it on the current theme
+        // location so images survive a theme rename, domain change or http/https switch.
+        return SOUTH_CITY_THEME_URI . '/assets/img/' . $match[1];
     }
 
     return is_string($asset) ? $asset : '';
