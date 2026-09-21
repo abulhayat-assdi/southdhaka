@@ -596,3 +596,40 @@ footer .menu a:hover {
     .sc-process { grid-template-columns: repeat(5, minmax(0, 1fr)); }
     .sc-amenity-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/*
+ * Utilities used by the templates that were missing from the compiled Tailwind
+ * output (main.css). The Tailwind source is not part of this repo, so they are
+ * kept here by hand. Each block mirrors what Tailwind would have generated.
+ */
+.min-h-\[220px\] { min-height: 220px; }
+.min-h-\[52px\] { min-height: 52px; }
+.\!min-h-\[48px\] { min-height: 48px !important; }
+.tracking-\[0\.08em\] { letter-spacing: 0.08em; }
+.text-emerald-600 { color: rgb(5 150 105); }
+.active\:bg-white\/5:active { background-color: rgb(255 255 255 / 0.05); }
+
+.from-navy-deep\/90 {
+    --tw-gradient-from: rgb(14 26 68 / 0.9) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(14 26 68 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-navy\/70 {
+    --tw-gradient-to: rgb(20 36 92 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), rgb(20 36 92 / 0.7) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
+.to-navy-deep\/40 {
+    --tw-gradient-to: rgb(14 26 68 / 0.4) var(--tw-gradient-to-position);
+}
+
+@media (min-width: 768px) {
+    .md\:h-auto { height: auto; }
+    .md\:min-h-\[280px\] { min-height: 280px; }
+}
+
+@media (min-width: 1024px) {
+    .lg\:order-1 { order: 1; }
+    .lg\:order-2 { order: 2; }
+}

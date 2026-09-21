@@ -10,13 +10,16 @@ if (! defined('ABSPATH')) {
 }
 
 /**
- * Insert or update a WordPress post with meta values.
- */
-/**
- * Bump this whenever the seed content below changes so an already-active
- * site re-applies it on the next request (see the init hook in functions.php).
+ * Version stamp written after the one-time first-run seed. The seed NEVER runs
+ * again on a site that has already been seeded (see south_city_seed_default_content),
+ * so bumping this no longer overwrites content the client has edited.
+ * After handover, change content in WordPress, not here.
  */
 const SOUTH_CITY_SEED_VERSION = 6;
+
+/**
+ * Insert or update a WordPress post with meta values.
+ */
 
 function south_city_upsert_seed_post(string $post_type, string $title, string $slug, array $meta = [], string $content = '', array $term_slugs = [], string $taxonomy = ''): int
 {
@@ -66,11 +69,19 @@ function south_city_upsert_seed_post(string $post_type, string $title, string $s
 }
 
 /**
- * Seed the converted Astro/Sanity content into WordPress once.
+ * Seed the converted Astro/Sanity content into WordPress — first run only.
+ *
+ * Any site that already has a seed marker is left completely untouched: this
+ * function overwrites homepage fields, global settings (including the brochure)
+ * and trashes posts that are not in the seed list, so it must never run on a
+ * site whose content has been edited by the client.
  */
 function south_city_seed_default_content(): void
 {
-    if ((int) get_option('south_city_seed_version', 0) >= SOUTH_CITY_SEED_VERSION) {
+    if (
+        (int) get_option('south_city_seed_version', 0) > 0
+        || get_option('south_city_default_content_seeded')
+    ) {
         return;
     }
 
@@ -132,7 +143,6 @@ function south_city_seed_default_content(): void
                 ['hotspot_id' => 'sector-03', 'x' => 0, 'y' => 0, 'name_en' => 'Sector 03', 'name_bn' => 'সেক্টর ০৩', 'desc_en' => 'The largest residential sector, on the 60 ft main boulevard beside the central mosque and lake.', 'desc_bn' => 'সবচেয়ে বড় আবাসিক সেক্টর — ৬০ ফুট প্রধান বুলেভার্ডে, কেন্দ্রীয় মসজিদ ও লেকের পাশে।'],
                 ['hotspot_id' => 'sector-04', 'x' => 0, 'y' => 0, 'name_en' => 'Sector 04', 'name_bn' => 'সেক্টর ০৪', 'desc_en' => 'South-east premium sector with villa & 20 katha duplex plots, lake park and a green edge along the expressway.', 'desc_bn' => 'দক্ষিণ-পূর্বের প্রিমিয়াম সেক্টর — ভিলা ও ২০ কাঠার ডুপ্লেক্স প্লট, লেক পার্ক এবং এক্সপ্রেসওয়ে ঘেঁষা সবুজ প্রান্ত।'],
             ],
-            'web3forms_key' => '094a49de-078c-48fd-9ec2-676a3626bf2b',
 
             // --- Chairman's Message (brochure p.3) ---
             'chairman_name_en' => 'South Dhaka Properties & Housing Ltd.',
@@ -224,7 +234,6 @@ function south_city_seed_default_content(): void
         'facebook_url' => 'https://www.facebook.com/SouthDhakaHousing.Ltd',
         'youtube_url' => '',
         'linkedin_url' => '',
-        'brochure_pdf' => '',
         'map_query' => 'South City Sayedpur Keraniganj Dhaka',
         'whatsapp_message_en' => "Assalamu Alaikum, I'm interested in South City plots.",
         'whatsapp_message_bn' => 'আসসালামু আলাইকুম, আমি সাউথ সিটির প্লট সম্পর্কে জানতে আগ্রহী।',

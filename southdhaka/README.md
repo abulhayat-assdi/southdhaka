@@ -49,8 +49,10 @@ The theme loads:
 - Fallback images from `assets/img/`
 - Brochure PDF is uploaded via the Media Library and set on the Brochure PDF field in South City Settings
 
-Run the Tailwind build again after changing PHP template classes:
+## Notes for developers
 
-```bash
-npx tailwindcss -i ./src/styles/global.css -o ./southdhaka/assets/css/main.css --content './southdhaka/**/*.php' './southdhaka/assets/js/**/*.js' './src/**/*.{astro,ts,js}'
-```
+- **Seed content runs once.** `inc/default-content.php` fills a brand-new site on first activation only. It never runs again on a site that already has content, so it cannot overwrite the client's edits. After handover, change content in WordPress, not in that file.
+- **Custom post types are not public** (no `/plots/`, `/gallery/` ... pages). Content is shown only through the homepage. They are edited from wp-admin or the /manage dashboard.
+- **Bangla pages** live under `/bn/` (`/bn/` and `/bn/{page-slug}/`). The language switcher on inner pages points to the same page in the other language.
+- **CSS.** `assets/css/main.css` is compiled Tailwind output and the Tailwind source is not in this repository, so it cannot be rebuilt from here. Add any new utility classes by hand to `assets/css/wp.css` (see the block at the bottom of that file).
+- **Enquiry emails** use `wp_mail()`. On shared hosting install an SMTP plugin (e.g. WP Mail SMTP) so messages reach the inbox.

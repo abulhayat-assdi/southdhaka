@@ -33,6 +33,10 @@ function southcity_cms_render_app() {
 			'label' => 'Homepage Content',
 			'icon'  => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
 		],
+		'settings' => [
+			'label' => 'Site Settings',
+			'icon'  => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z'
+		],
 		'brochure' => [
 			'label' => 'Brochure',
 			'icon'  => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
@@ -80,7 +84,7 @@ function southcity_cms_render_app() {
 			/* Minor tweaks to make ACF forms look native in this layout */
 			.acf-field { border: none !important; padding: 15px 0 !important; }
 			.acf-label label { font-weight: 600 !important; color: #1e293b !important; font-family: ui-sans-serif, system-ui, sans-serif !important; }
-			.acf-input input[type="text"], .acf-input textarea, .acf-input select { border-radius: 0.375rem !important; border: 1px solid #cbd5e1 !important; padding: 0.5rem 0.75rem !important; width: 100% !important; max-width: 100% !important; }
+			.acf-input input[type="text"], .acf-input input[type="url"], .acf-input input[type="email"], .acf-input input[type="password"], .acf-input textarea, .acf-input select { border-radius: 0.375rem !important; border: 1px solid #cbd5e1 !important; padding: 0.5rem 0.75rem !important; width: 100% !important; max-width: 100% !important; }
 			.acf-button, .acf-field .button { background-color: #14245C !important; border-color: #14245C !important; color: #ffffff !important; text-shadow: none !important; box-shadow: none !important; padding: 6px 14px !important; }
 			.acf-button:hover, .acf-field .button:hover { background-color: #0E1A44 !important; color: #ffffff !important; }
 			.acf-field .button:visited { color: #ffffff !important; }
@@ -165,7 +169,7 @@ function southcity_cms_render_app() {
 									southcity_cms_render_leads_list();
 								}
 							} elseif ( $view === 'settings' ) {
-								southcity_cms_render_settings_moved_notice();
+								southcity_cms_render_settings_form();
 							} elseif ( $view === 'brochure' ) {
 								southcity_cms_render_brochure_form();
 							} elseif ( $view === 'homepage' ) {
@@ -186,6 +190,12 @@ function southcity_cms_render_app() {
 			</div>
 		</div>
 		
+		<script>
+			// Browsers may auto-fill saved logins into unrelated settings fields; switch that off.
+			document.querySelectorAll('.acf-form input[type="text"], .acf-form input[type="url"], .acf-form input[type="email"]').forEach(function (input) {
+				input.setAttribute('autocomplete', 'off');
+			});
+		</script>
 		<?php wp_footer(); ?>
 	</body>
 	</html>
@@ -211,16 +221,49 @@ function southcity_cms_render_acf_missing_notice() {
 }
 
 /**
- * Global Settings now lives only in the main WordPress dashboard (ACF options page).
+ * Global site settings (phone, WhatsApp, notification email, SEO, analytics...).
+ *
+ * Rendered with acf_form() so it works with the free ACF plugin. The ACF Pro
+ * "options page" is not required; both write to the same saved options.
  */
-function southcity_cms_render_settings_moved_notice() {
-	$settings_url = admin_url( 'admin.php?page=south-city-settings' );
-
+function southcity_cms_render_settings_form() {
 	echo '<div class="bg-white shadow rounded-lg p-6">';
-	echo '<p class="text-slate-600">Global Settings is now managed from the main WordPress dashboard.</p>';
-	echo '<a href="' . esc_url( $settings_url ) . '" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#14245C] hover:bg-[#0E1A44]" target="_blank" rel="noopener">Open in WordPress Dashboard &rarr;</a>';
+
+	if ( function_exists( 'acf_form' ) ) {
+		acf_form( [
+			'id'                   => 'sc-settings-form',
+			'post_id'              => 'options',
+			'field_groups'         => [ 'group_south_city_global_settings' ],
+			'post_title'           => false,
+			'post_content'         => false,
+			'submit_value'         => 'Save Settings',
+			'return'               => add_query_arg( [ 'view' => 'settings', 'updated' => 'true' ], southcity_cms_url() ),
+			'html_updated_message' => '<div class="bg-green-50 text-green-800 p-4 rounded-md mb-4 font-medium">Settings saved successfully.</div>',
+		] );
+	} else {
+		southcity_cms_render_acf_missing_notice();
+	}
+
 	echo '</div>';
 }
+
+/**
+ * Without ACF Pro there is no "South City Settings" page in wp-admin, so add a
+ * menu entry that opens the same settings inside the /manage dashboard.
+ */
+function southcity_cms_register_settings_menu() {
+	if ( function_exists( 'acf_add_options_page' ) ) {
+		return;
+	}
+
+	$hook = add_menu_page( 'South City Settings', 'South City Settings', 'manage_options', 'south-city-settings', '__return_null', 'dashicons-admin-home', 59 );
+
+	add_action( 'load-' . $hook, static function () {
+		wp_safe_redirect( add_query_arg( 'view', 'settings', southcity_cms_url() ) );
+		exit;
+	} );
+}
+add_action( 'admin_menu', 'southcity_cms_register_settings_menu' );
 
 /**
  * Render just the Brochure PDF field from the ACF options page, so it can be

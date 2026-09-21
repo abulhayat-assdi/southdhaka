@@ -54,7 +54,7 @@ if ($hero_headline === '') {
 
 if ($hero_subline === '') {
     $hero_subline = $language === 'bn'
-        ? 'সৈয়দপুর ইউনিয়নে প্রায় ৬০০ বিঘার পরিকল্পিত টাউনশিপ।'
+        ? 'সৈয়দপুর ইউনিয়নে প্রায় ৮০০ বিঘার পরিকল্পিত টাউনশিপ।'
         : 'A planned township in Sayedpur Union beside the Eastern Bypass.';
 }
 
@@ -677,8 +677,11 @@ if ($master_plan_image === '' && file_exists(SOUTH_CITY_THEME_DIR . '/assets/img
                         <input id="lf-msg" name="message" type="text" class="h-12 w-full rounded-md border border-line px-3.5 text-base text-ink focus:border-gold">
                     </div>
                 </div>
+                <?php if (south_city_turnstile_site_key() !== '') : ?>
+                    <div class="cf-turnstile mt-4" data-sitekey="<?php echo esc_attr(south_city_turnstile_site_key()); ?>" data-language="<?php echo esc_attr($language === 'bn' ? 'bn' : 'en'); ?>"></div>
+                <?php endif; ?>
                 <div class="mt-6">
-                    <button type="submit" id="lf-submit" class="btn-gold w-full" data-track="form_submit"><?php echo esc_html(south_city_translate('form_submit', $language)); ?></button>
+                    <button type="submit" id="lf-submit" class="btn-gold w-full"><?php echo esc_html(south_city_translate('form_submit', $language)); ?></button>
                 </div>
                 <p id="lf-error" class="mt-3 hidden text-center text-sm font-medium text-red-600"><?php echo esc_html($language === 'bn' ? 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।' : 'Something went wrong. Please try again.'); ?></p>
                 <p id="lf-success" class="mt-3 hidden text-center text-sm font-medium text-emerald-600"><?php echo esc_html($language === 'bn' ? 'ধন্যবাদ! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।' : 'Thank you! We will get back to you shortly.'); ?></p>

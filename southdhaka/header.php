@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
 
 $language       = south_city_current_language();
 $other_language = $language === 'bn' ? 'en' : 'bn';
-$language_url   = $language === 'bn' ? home_url('/') : home_url('/bn/');
+$language_url   = south_city_language_switch_url($language);
 $company_name   = south_city_get_locale_option('company_name', $language);
 $company_name   = $company_name !== '' ? $company_name : 'South Dhaka Properties & Housing Ltd.';
 $default_nav    = south_city_default_nav_items($language);
@@ -22,6 +22,16 @@ $contact_url    = is_front_page() ? '#contact' : trailingslashit($language === '
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        // Scroll-reveal is only hidden-by-default when JS is running. If main.js has not
+        // signalled it is ready within 3s (blocked / delayed by a cache plugin), show everything.
+        document.documentElement.classList.add('js');
+        setTimeout(function () {
+            if (!document.documentElement.classList.contains('sc-ready')) {
+                document.documentElement.classList.add('sc-reveal-fallback');
+            }
+        }, 3000);
+    </script>
     <link rel="profile" href="https://gmpg.org/xfn/11">
     <?php wp_head(); ?>
 </head>

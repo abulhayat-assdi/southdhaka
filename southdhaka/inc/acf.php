@@ -187,6 +187,78 @@ function south_city_register_acf_field_groups(): void
                 'type' => 'textarea',
                 'rows' => 3,
             ],
+            [
+                'key' => 'field_south_city_notify_email',
+                'label' => __('Enquiry notification email', 'south-city'),
+                'name' => 'notify_email',
+                'type' => 'text',
+                'instructions' => __('Every contact-form enquiry is emailed here. Separate several addresses with commas. If empty, the WordPress admin email is used.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_seo_title_en',
+                'label' => __('Google Title - English', 'south-city'),
+                'name' => 'seo_title_en',
+                'type' => 'text',
+                'instructions' => __('Homepage title shown on Google and browser tabs (about 60 characters). Leave empty to use the default.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_seo_title_bn',
+                'label' => __('Google Title - Bangla', 'south-city'),
+                'name' => 'seo_title_bn',
+                'type' => 'text',
+            ],
+            [
+                'key' => 'field_south_city_seo_description_en',
+                'label' => __('Google Description - English', 'south-city'),
+                'name' => 'seo_description_en',
+                'type' => 'textarea',
+                'rows' => 3,
+                'instructions' => __('One or two sentences shown under the title on Google (about 155 characters). Leave empty to use the default.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_seo_description_bn',
+                'label' => __('Google Description - Bangla', 'south-city'),
+                'name' => 'seo_description_bn',
+                'type' => 'textarea',
+                'rows' => 3,
+            ],
+            [
+                'key' => 'field_south_city_og_image',
+                'label' => __('Social share image', 'south-city'),
+                'name' => 'og_image',
+                'type' => 'image',
+                'return_format' => 'array',
+                'preview_size' => 'medium',
+                'library' => 'all',
+                'instructions' => __('Picture shown when the link is shared on Facebook / WhatsApp. Use a JPG or PNG, 1200 x 630 px. If empty, the hero image is used.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_ga4_id',
+                'label' => __('Google Analytics 4 Measurement ID', 'south-city'),
+                'name' => 'ga4_id',
+                'type' => 'text',
+                'instructions' => __('Looks like G-XXXXXXXXXX. Leave empty to turn Google Analytics off.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_meta_pixel_id',
+                'label' => __('Meta (Facebook) Pixel ID', 'south-city'),
+                'name' => 'meta_pixel_id',
+                'type' => 'text',
+                'instructions' => __('Numbers only, for example 123456789012345. Leave empty to turn the Pixel off.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_turnstile_site_key',
+                'label' => __('Cloudflare Turnstile Site Key', 'south-city'),
+                'name' => 'turnstile_site_key',
+                'type' => 'text',
+                'instructions' => __('Optional spam protection for the contact form. Fill BOTH the site key and the secret key from Cloudflare > Turnstile, or leave both empty.', 'south-city'),
+            ],
+            [
+                'key' => 'field_south_city_turnstile_secret_key',
+                'label' => __('Cloudflare Turnstile Secret Key', 'south-city'),
+                'name' => 'turnstile_secret_key',
+                'type' => 'password',
+            ],
         ],
         'location' => [
             [
@@ -774,12 +846,6 @@ function south_city_register_acf_field_groups(): void
                     ],
                 ],
             ],
-            [
-                'key' => 'field_south_city_web3forms_key',
-                'label' => __('Web3Forms Access Key', 'south-city'),
-                'name' => 'web3forms_key',
-                'type' => 'text',
-            ],
         ],
         'location' => [
             [
@@ -1270,3 +1336,40 @@ function south_city_register_acf_field_groups(): void
     ]);
 }
 add_action('acf/init', 'south_city_register_acf_field_groups');
+
+/**
+ * Reject values a browser may have auto-filled by mistake (saved emails/passwords)
+ * in the settings that feed public HTML. Empty is always allowed.
+ */
+function south_city_validate_setting($valid, $value, string $rule)
+{
+    $value = trim((string) $value);
+
+    if ($valid !== true || $value === '') {
+        return $valid;
+    }
+
+    $ok = match ($rule) {
+        'turnstile' => south_city_is_turnstile_key($value),
+        'ga4'       => preg_match('/^G-[A-Z0-9]{6,16}$/i', $value) === 1,
+        'pixel'     => preg_match('/^[0-9]{8,20}$/', $value) === 1,
+        'emails'    => array_filter(array_map('trim', explode(',', $value)), static fn ($e) => ! is_email($e)) === [],
+        default       => true,
+    };
+
+    if ($ok) {
+        return $valid;
+    }
+
+    return match ($rule) {
+        'turnstile' => __('This is not a Cloudflare Turnstile key (they start with 0x). Clear this field if you do not use Turnstile.', 'south-city'),
+        'ga4'       => __('A Google Analytics 4 ID looks like G-XXXXXXXXXX.', 'south-city'),
+        'pixel'     => __('A Meta Pixel ID is numbers only.', 'south-city'),
+        default       => __('Please enter valid email address(es), separated by commas.', 'south-city'),
+    };
+}
+add_filter('acf/validate_value/name=turnstile_site_key', static fn ($valid, $value) => south_city_validate_setting($valid, $value, 'turnstile'), 10, 2);
+add_filter('acf/validate_value/name=turnstile_secret_key', static fn ($valid, $value) => south_city_validate_setting($valid, $value, 'turnstile'), 10, 2);
+add_filter('acf/validate_value/name=ga4_id', static fn ($valid, $value) => south_city_validate_setting($valid, $value, 'ga4'), 10, 2);
+add_filter('acf/validate_value/name=meta_pixel_id', static fn ($valid, $value) => south_city_validate_setting($valid, $value, 'pixel'), 10, 2);
+add_filter('acf/validate_value/name=notify_email', static fn ($valid, $value) => south_city_validate_setting($valid, $value, 'emails'), 10, 2);

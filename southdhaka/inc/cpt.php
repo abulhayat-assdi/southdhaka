@@ -34,11 +34,14 @@ function south_city_register_post_types(): void
             'insert_into_item'      => __('Insert into plot', 'south-city'),
             'uploaded_to_this_item' => __('Uploaded to this plot', 'south-city'),
         ],
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'plots'],
+        'public'       => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
+        'has_archive'  => false,
         'menu_icon'    => 'dashicons-location-alt',
-        'show_in_rest' => true,
+        'show_in_rest' => false,
         'supports'     => ['title', 'editor', 'thumbnail', 'excerpt', 'page-attributes'],
     ]);
 
@@ -56,12 +59,15 @@ function south_city_register_post_types(): void
             'not_found_in_trash' => __('No trust badges found in Trash.', 'south-city'),
             'all_items'          => __('All Trust Badges', 'south-city'),
         ],
-        'public'              => true,
+        'public'              => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
         'exclude_from_search' => true,
-        'has_archive'         => true,
-        'rewrite'             => ['slug' => 'trust-badges'],
+        'has_archive'         => false,
         'menu_icon'           => 'dashicons-shield-alt',
-        'show_in_rest'        => true,
+        'show_in_rest'        => false,
         'supports'            => ['title', 'page-attributes'],
     ]);
 
@@ -79,12 +85,15 @@ function south_city_register_post_types(): void
             'not_found_in_trash' => __('No project facts found in Trash.', 'south-city'),
             'all_items'          => __('All Project Facts', 'south-city'),
         ],
-        'public'              => true,
+        'public'              => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
         'exclude_from_search' => true,
-        'has_archive'         => true,
-        'rewrite'             => ['slug' => 'project-facts'],
+        'has_archive'         => false,
         'menu_icon'           => 'dashicons-info-outline',
-        'show_in_rest'        => true,
+        'show_in_rest'        => false,
         'supports'            => ['title', 'page-attributes'],
     ]);
 
@@ -103,11 +112,14 @@ function south_city_register_post_types(): void
             'all_items'          => __('All Amenities', 'south-city'),
             'archives'           => __('Amenity Archives', 'south-city'),
         ],
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'amenities'],
+        'public'       => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
+        'has_archive'  => false,
         'menu_icon'    => 'dashicons-palmtree',
-        'show_in_rest' => true,
+        'show_in_rest' => false,
         'supports'     => ['title', 'editor', 'thumbnail', 'page-attributes'],
     ]);
 
@@ -126,11 +138,14 @@ function south_city_register_post_types(): void
             'all_items'          => __('All Neighborhood Tabs', 'south-city'),
             'archives'           => __('Neighborhood Archives', 'south-city'),
         ],
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'neighborhood'],
+        'public'       => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
+        'has_archive'  => false,
         'menu_icon'    => 'dashicons-location',
-        'show_in_rest' => true,
+        'show_in_rest' => false,
         'supports'     => ['title', 'editor', 'thumbnail', 'page-attributes'],
     ]);
 
@@ -149,12 +164,15 @@ function south_city_register_post_types(): void
             'all_items'          => __('All Locations', 'south-city'),
             'archives'           => __('Location Archives', 'south-city'),
         ],
-        'public'              => true,
+        'public'              => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
         'exclude_from_search' => true,
         'has_archive'         => false,
-        'rewrite'             => ['slug' => 'locations'],
         'menu_icon'           => 'dashicons-location-alt',
-        'show_in_rest'        => true,
+        'show_in_rest'        => false,
         'supports'            => ['title', 'page-attributes'],
     ]);
 
@@ -173,11 +191,14 @@ function south_city_register_post_types(): void
             'all_items'          => __('All Gallery Images', 'south-city'),
             'archives'           => __('Gallery Archives', 'south-city'),
         ],
-        'public'       => true,
-        'has_archive'  => true,
-        'rewrite'      => ['slug' => 'gallery'],
+        'public'       => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => false,
+        'has_archive'  => false,
         'menu_icon'    => 'dashicons-format-gallery',
-        'show_in_rest' => true,
+        'show_in_rest' => false,
         'supports'     => ['title', 'editor', 'thumbnail', 'page-attributes'],
     ]);
 }
@@ -202,10 +223,12 @@ function south_city_register_taxonomies(): void
             'new_item_name'     => __('New Plot Zone Name', 'south-city'),
             'menu_name'         => __('Plot Zones', 'south-city'),
         ],
+        'public' => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
         'hierarchical'      => true,
         'show_admin_column' => true,
-        'show_in_rest'     => true,
-        'rewrite'          => ['slug' => 'plot-zone'],
+        'show_in_rest'     => false,
     ]);
 
     register_taxonomy('southcity_amenity_group', ['southcity_amenity'], [
@@ -224,10 +247,12 @@ function south_city_register_taxonomies(): void
             'choose_from_most_used'      => __('Choose from the most used amenity groups', 'south-city'),
             'menu_name'                  => __('Amenity Groups', 'south-city'),
         ],
+        'public' => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
         'hierarchical'      => false,
         'show_admin_column' => true,
-        'show_in_rest'     => true,
-        'rewrite'          => ['slug' => 'amenity-group'],
+        'show_in_rest'     => false,
     ]);
 }
 add_action('init', 'south_city_register_taxonomies');
@@ -236,8 +261,16 @@ add_action('init', 'south_city_register_taxonomies');
  * Only one location can be the homepage map pin at a time, so unset the
  * flag on every other location whenever one is saved as primary.
  */
-function south_city_enforce_single_primary_location(int $post_id): void
+function south_city_enforce_single_primary_location($post_id): void
 {
+    // ACF passes "options" (settings forms) or "user_5" here, not only post IDs.
+    // Typing this as int made every settings save crash with a TypeError.
+    if (! is_numeric($post_id)) {
+        return;
+    }
+
+    $post_id = (int) $post_id;
+
     if (get_post_type($post_id) !== 'southcity_location') {
         return;
     }

@@ -9,9 +9,12 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('SOUTH_CITY_THEME_VERSION', '1.0.0');
+define('SOUTH_CITY_THEME_VERSION', '1.1.2');
 define('SOUTH_CITY_THEME_DIR', get_template_directory());
 define('SOUTH_CITY_THEME_URI', get_template_directory_uri());
+
+// Bump this when a rewrite rule is added/changed so it is flushed once automatically.
+define('SOUTH_CITY_REWRITE_VERSION', 2);
 
 // South City project location (Google Maps plus code J8WC+GXG, Sayedpur, South Keraniganj).
 define('SOUTH_CITY_MAP_LAT', '23.6463');
@@ -32,7 +35,6 @@ function south_city_setup(): void
         'flex-height' => true,
         'flex-width'  => true,
     ]);
-    add_theme_support('automatic-feed-links');
     add_theme_support('responsive-embeds');
     add_theme_support('align-wide');
     add_theme_support('html5', [
@@ -66,8 +68,25 @@ function south_city_register_language_routes(): void
         : 'index.php?south_city_lang=bn';
 
     add_rewrite_rule('^bn/?$', $target, 'top');
+    // /bn/about-us/ etc.: the Bangla version of any top-level page.
+    add_rewrite_rule('^bn/([^/]+)/?$', 'index.php?pagename=$matches[1]&south_city_lang=bn', 'top');
 }
 add_action('init', 'south_city_register_language_routes');
+
+/**
+ * Flush rewrite rules once whenever SOUTH_CITY_REWRITE_VERSION changes, so a
+ * theme update that adds/removes URLs works without visiting Settings > Permalinks.
+ */
+function south_city_maybe_flush_rewrite_rules(): void
+{
+    if ((int) get_option('south_city_rewrite_version', 0) >= SOUTH_CITY_REWRITE_VERSION) {
+        return;
+    }
+
+    flush_rewrite_rules(false);
+    update_option('south_city_rewrite_version', SOUTH_CITY_REWRITE_VERSION);
+}
+add_action('init', 'south_city_maybe_flush_rewrite_rules', 100);
 
 /**
  * Force /bn/ to load the real front page directly from the raw request
@@ -83,6 +102,17 @@ function south_city_force_bn_homepage_query(WP $wp): void
 
     if ($home_path !== '' && str_starts_with($request_path, $home_path)) {
         $request_path = trim(substr($request_path, strlen($home_path)), '/');
+    }
+
+    // /bn/{page-slug}/ — the Bangla version of an ordinary page (e.g. About Us).
+    if (preg_match('#^bn/([^/]+)$#', $request_path, $matches)) {
+        $slug = sanitize_title($matches[1]);
+
+        if ($slug !== '' && get_page_by_path($slug, OBJECT, 'page') instanceof WP_Post) {
+            $wp->query_vars = ['pagename' => $slug, 'south_city_lang' => 'bn'];
+        }
+
+        return;
     }
 
     if ($request_path !== 'bn') {
@@ -250,6 +280,16 @@ function south_city_enqueue_assets(): void
         file_exists($js_path) ? (string) filemtime($js_path) : SOUTH_CITY_THEME_VERSION,
         true
     );
+
+    if (is_front_page() && south_city_turnstile_site_key() !== '') {
+        wp_enqueue_script(
+            'south-city-turnstile',
+            'https://challenges.cloudflare.com/turnstile/v0/api.js',
+            [],
+            null,
+            ['strategy' => 'async', 'in_footer' => true]
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'south_city_enqueue_assets');
 
@@ -288,6 +328,51 @@ function south_city_current_language(): string
     $locale = determine_locale();
 
     return str_starts_with($locale, 'bn') ? 'bn' : 'en';
+}
+
+/**
+ * URL of a page in the given language (English: normal permalink, Bangla: /bn/{slug}/).
+ */
+function south_city_localized_url(int $post_id, ?string $language = null): string
+{
+    $language = $language ?: south_city_current_language();
+
+    if ($language !== 'bn') {
+        return (string) get_permalink($post_id);
+    }
+
+    if ($post_id === (int) get_option('page_on_front')) {
+        return home_url('/bn/');
+    }
+
+    $uri = get_page_uri($post_id);
+
+    // /bn/ routing only covers top-level pages; nested pages keep their normal URL.
+    if ($uri === '' || str_contains($uri, '/')) {
+        return (string) get_permalink($post_id);
+    }
+
+    return home_url('/bn/' . $uri . '/');
+}
+
+/**
+ * URL the language switcher should point to: the same page in the other
+ * language, or the other-language homepage on non-page screens.
+ */
+function south_city_language_switch_url(?string $language = null): string
+{
+    $language = $language ?: south_city_current_language();
+    $target   = $language === 'bn' ? 'en' : 'bn';
+
+    if (is_page() && ! is_front_page()) {
+        $page_id = (int) get_queried_object_id();
+
+        if ($page_id > 0) {
+            return south_city_localized_url($page_id, $target);
+        }
+    }
+
+    return $target === 'bn' ? home_url('/bn/') : home_url('/');
 }
 
 /**
@@ -795,7 +880,7 @@ function south_city_default_nav_items(?string $language = null): array
 
     if ($about_page_id > 0) {
         $items[] = [
-            'href' => get_permalink($about_page_id),
+            'href' => south_city_localized_url($about_page_id, $language),
             'label' => south_city_translate('about_us', $language),
             'spy' => '',
         ];
@@ -1100,6 +1185,8 @@ function south_city_amenities_in_group(string $group_slug): WP_Query
 require_once SOUTH_CITY_THEME_DIR . '/inc/cpt.php';
 require_once SOUTH_CITY_THEME_DIR . '/inc/acf.php';
 require_once SOUTH_CITY_THEME_DIR . '/inc/default-content.php';
+require_once SOUTH_CITY_THEME_DIR . '/inc/seo.php';
+require_once SOUTH_CITY_THEME_DIR . '/inc/tracking.php';
 
 /**
  * Re-apply seed content when SOUTH_CITY_SEED_VERSION has been bumped.

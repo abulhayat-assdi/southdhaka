@@ -29,6 +29,47 @@
         }
     };
 
+    // Fire the ad/analytics conversion events (only if GA4 / Meta Pixel are installed).
+    var trackLeadConversion = function () {
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', 'generate_lead');
+            window.gtag('event', 'form_submit');
+        }
+
+        if (typeof window.fbq === 'function') {
+            window.fbq('track', 'Lead');
+        }
+    };
+
+    // Left/Right/Home/End move between tabs, as the ARIA tab pattern promises.
+    var enableTabKeyboard = function (tabs, activate) {
+        var list = Array.prototype.slice.call(tabs);
+
+        list.forEach(function (tab, index) {
+            tab.addEventListener('keydown', function (event) {
+                var next = -1;
+
+                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                    next = (index + 1) % list.length;
+                } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                    next = (index - 1 + list.length) % list.length;
+                } else if (event.key === 'Home') {
+                    next = 0;
+                } else if (event.key === 'End') {
+                    next = list.length - 1;
+                }
+
+                if (next < 0) {
+                    return;
+                }
+
+                event.preventDefault();
+                list[next].focus();
+                activate(list[next]);
+            });
+        });
+    };
+
     var header = document.getElementById('site-header');
     var menuButton = document.getElementById('menu-btn');
     var mobileMenu = document.getElementById('mobile-menu');
@@ -135,7 +176,15 @@
         document.querySelectorAll('.reveal').forEach(function (element) {
             revealObserver.observe(element);
         });
+    } else {
+        // Very old browsers: no observer, so never leave content hidden.
+        document.querySelectorAll('.reveal').forEach(function (element) {
+            element.classList.add('in-view');
+        });
     }
+
+    // Tells the inline fallback in header.php that this script is running.
+    document.documentElement.classList.add('sc-ready');
 
     var toBanglaNumber = function (value) {
         return value.replace(/\d/g, function (digit) {
@@ -195,6 +244,7 @@
     document.querySelectorAll('[data-tabs]').forEach(function (root) {
         var tabs = root.querySelectorAll('[data-tab]');
         var panels = root.querySelectorAll('[data-panel]');
+        var accordions = root.querySelectorAll('[data-acc]');
 
         var activate = function (id, toggle) {
             panels.forEach(function (panel) {
@@ -215,6 +265,12 @@
                 tab.classList.toggle('border-b-0', !isCurrent);
                 tab.classList.toggle('border-line', !isCurrent);
             });
+
+            // Keep the mobile accordion buttons' aria-expanded in sync with the panels.
+            accordions.forEach(function (accordion) {
+                var panel = root.querySelector('[data-panel="' + accordion.getAttribute('data-acc') + '"]');
+                accordion.setAttribute('aria-expanded', String(!!panel && !panel.classList.contains('hidden')));
+            });
         };
 
         tabs.forEach(function (tab) {
@@ -223,7 +279,11 @@
             });
         });
 
-        root.querySelectorAll('[data-acc]').forEach(function (accordion) {
+        enableTabKeyboard(tabs, function (tab) {
+            activate(tab.getAttribute('data-tab'), false);
+        });
+
+        accordions.forEach(function (accordion) {
             accordion.addEventListener('click', function () {
                 activate(accordion.getAttribute('data-acc'), true);
             });
@@ -256,6 +316,10 @@
             tab.addEventListener('click', function () {
                 activate(tab.getAttribute('data-lmtab'));
             });
+        });
+
+        enableTabKeyboard(tabs, function (tab) {
+            activate(tab.getAttribute('data-lmtab'));
         });
     });
 
@@ -424,6 +488,13 @@
             body.set('plot_size', plotField instanceof HTMLSelectElement ? plotField.value : '');
             body.set('message', messageField instanceof HTMLInputElement ? messageField.value.trim() : '');
 
+            // Cloudflare Turnstile token (only present when Turnstile is configured).
+            var turnstileField = leadForm.querySelector('[name="cf-turnstile-response"]');
+
+            if (turnstileField instanceof HTMLInputElement) {
+                body.set('turnstile', turnstileField.value);
+            }
+
             fetch(config.ajaxUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -435,8 +506,14 @@
                     submitButton.disabled = false;
                 }
 
+                // Turnstile tokens are single-use: always request a fresh one.
+                if (window.turnstile && typeof window.turnstile.reset === 'function' && turnstileField) {
+                    window.turnstile.reset();
+                }
+
                 if (data && data.success) {
                     leadForm.reset();
+                    trackLeadConversion();
 
                     if (successBox) {
                         successBox.classList.remove('hidden');
